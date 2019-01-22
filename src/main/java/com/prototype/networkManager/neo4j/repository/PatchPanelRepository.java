@@ -1,0 +1,9 @@
+package com.prototype.networkManager.neo4j.repository;
+
+import com.prototype.networkManager.neo4j.domain.PatchPanel;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+@RepositoryRestResource
+public interface PatchPanelRepository extends PagingAndSortingRepository<PatchPanel, Long> {
+}
