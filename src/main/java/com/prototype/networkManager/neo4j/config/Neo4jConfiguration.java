@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableNeo4jRepositories(basePackages = "com.prototype.networkManager.neo4j")
-@ComponentScan(basePackages = "com.prototype.networkManager.neo4j.domain")
 @EnableTransactionManagement
 public class Neo4jConfiguration {
 
