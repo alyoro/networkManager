@@ -83,4 +83,6 @@ public class PatchPanel extends Node {
     public void setPorts(List<Port> ports) {
         this.ports = ports;
     }
+
+    public void addPort(Port port){ this.ports.add(port);}
 }
