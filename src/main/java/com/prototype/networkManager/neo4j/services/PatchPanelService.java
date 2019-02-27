@@ -2,6 +2,7 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
 
 
 public interface PatchPanelService {
@@ -10,6 +11,6 @@ public interface PatchPanelService {
 
     Iterable<PatchPanel> findAll();
 
-    void addPort(Long id, Port port);
+    void addPort(Long id, Port port) throws PortNumberAlreadyInListException;
 }
 
