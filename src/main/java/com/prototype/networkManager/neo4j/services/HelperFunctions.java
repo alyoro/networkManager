@@ -4,7 +4,7 @@ import com.prototype.networkManager.neo4j.domain.Port;
 
 import java.util.List;
 
-public interface HelperFuncitons {
+public interface HelperFunctions {
 
     boolean arePortNumberListUnique(List<Port> ports, int newPortNumber);
 

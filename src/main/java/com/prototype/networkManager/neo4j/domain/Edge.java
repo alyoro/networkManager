@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
 
 @RelationshipEntity
@@ -9,9 +10,11 @@ public class Edge {
     private Long id;
 
     @StartNode
+    @JsonIgnore
     private Node startNode;
 
     @EndNode
+    @JsonIgnore
     private Node endNode;
 
 

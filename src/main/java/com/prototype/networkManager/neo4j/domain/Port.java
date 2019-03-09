@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public class Port extends Node {
     private String portOnTheUpperElement;
 
     @Relationship(type = "CONNECTION", direction = Relationship.UNDIRECTED)
+    @JsonManagedReference
     private List<Connection> connections;
 
     public Port() {

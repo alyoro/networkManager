@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HelperFunctionsImpl implements HelperFuncitons {
+public class HelperFunctionsImpl implements HelperFunctions {
 
     @Override
     public boolean arePortNumberListUnique(List<Port> ports, int newPortNumber) {

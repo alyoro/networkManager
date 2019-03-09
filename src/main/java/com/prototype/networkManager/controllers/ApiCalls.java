@@ -1,13 +1,19 @@
 package com.prototype.networkManager.controllers;
 
+import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
+import com.prototype.networkManager.neo4j.services.ConnectionService;
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.tags.HtmlEscapeTag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController("/")
 public class ApiCalls {
@@ -15,6 +21,9 @@ public class ApiCalls {
 
     @Autowired
     PatchPanelService patchPanelService;
+
+    @Autowired
+    ConnectionService connectionService;
 
     @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("api/PATCH_PANEL/add")
@@ -43,6 +52,21 @@ public class ApiCalls {
                     HttpStatus.CONFLICT, "Port number already in device list", e);
         }
 
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @PostMapping("api/connections")
+    public Connection addConnection(@RequestBody List<Port> ports){
+        Connection conn = null;
+        try{
+            System.out.println(ports);
+            return connectionService.addConnection(ports);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"addconnection");
+
+        }
     }
 
 }
