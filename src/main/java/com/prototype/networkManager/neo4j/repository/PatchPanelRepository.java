@@ -7,5 +7,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface PatchPanelRepository extends PagingAndSortingRepository<PatchPanel, Long> {
-    Iterable<PatchPanel> findAll(@Depth int dept);
+    Iterable<PatchPanel> findAll(@Depth int depth);
 }

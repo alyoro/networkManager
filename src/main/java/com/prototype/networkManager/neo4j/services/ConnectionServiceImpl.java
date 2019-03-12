@@ -20,7 +20,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     PortRepository portRepository;
 
     @Override
-    public Iterable<Connection> getAll() {
+    public Iterable<Connection> getConnections() {
         return connectionRepository.findAll();
     }
 

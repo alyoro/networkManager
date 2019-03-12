@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ConnectionService {
 
-    Iterable<Connection> getAll();
+    Iterable<Connection> getConnections();
     Connection addConnection(List<Port> ports);
 }

@@ -34,6 +34,11 @@ public class PortServiceImpl implements PortService {
     }
 
     @Override
+    public Iterable<Port> getPorts(Long id) {
+        return portRepository.getPorts(id);
+    }
+
+    @Override
     public void deletePort(Long id) throws PortNotFoundException{
         if(portRepository.findById(id).isPresent()){
             portRepository.deleteById(id);

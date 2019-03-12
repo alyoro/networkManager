@@ -7,15 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
-
 public interface PortController {
 
     PortService getPortService();
 
     @GetMapping(path = "/ports")
     default Iterable<Port> getPorts(){
-        System.out.println("jestem  tu");
         return getPortService().getPorts();
     }
 
@@ -37,5 +34,5 @@ public interface PortController {
         }
     }
 
-    abstract void createPort(@PathVariable("id") Long id, @RequestBody Port port);
+    void createPort(@PathVariable("id") Long id, @RequestBody Port port);
 }
