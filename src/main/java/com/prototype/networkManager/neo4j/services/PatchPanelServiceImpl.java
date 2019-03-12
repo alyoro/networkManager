@@ -2,6 +2,7 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
 import com.prototype.networkManager.neo4j.repository.PatchPanelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,10 @@ public class PatchPanelServiceImpl implements PatchPanelService{
 
     @Override
     public void addPort(Long id, Port port) throws PortNumberAlreadyInListException{
-//        System.out.println(port.getDevicePlugged());
 
         Optional<PatchPanel> patchPanel = patchPanelRepository.findById(id);
         if(patchPanel == null) {
-            return; // TODO throw
+            System.out.println("PatchPanel not found");
         }
         else {
 	        List<Port> ports = patchPanel.get().getPorts();

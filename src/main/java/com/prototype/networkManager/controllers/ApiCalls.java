@@ -6,27 +6,41 @@ import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
 import com.prototype.networkManager.neo4j.services.ConnectionService;
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
+import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.tags.HtmlEscapeTag;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@RestController("/")
-public class ApiCalls {
+@RestController
+@RequestMapping("/api")
+public class ApiCalls implements PortController{
 
 
-    @Autowired
+    private final
     PatchPanelService patchPanelService;
 
-    @Autowired
+    private final
     ConnectionService connectionService;
 
+    private  final
+    PortService portService;
+
+    @Override
+    public PortService getPortService() {
+        return portService;
+    }
+
+    @Autowired
+    public ApiCalls(PatchPanelService patchPanelService, ConnectionService connectionService, PortService portService) {
+        this.patchPanelService = patchPanelService;
+        this.connectionService = connectionService;
+        this.portService = portService;
+    }
+
     @CrossOrigin(origins = "http://localhost:8080")
-    @PostMapping("api/PATCH_PANEL/add")
+    @PostMapping("/PATCH_PANEL/add")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPatchPanel(@RequestBody PatchPanel patchPanel){
         System.out.println("AddPP");
@@ -35,14 +49,14 @@ public class ApiCalls {
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping("api/PATCH_PANEL/getAll")
+    @GetMapping("/PATCH_PANEL/getAll")
     public Iterable<PatchPanel> getAllPatchPanel(){
         return patchPanelService.findAll();
     }
 
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @PostMapping("api/PATCH_PANEL/addPort")
+    @PostMapping("/PATCH_PANEL/addPort")
     public String addPort(@RequestParam Long id,@RequestBody Port port){
         try{
             patchPanelService.addPort(id,port);
@@ -56,7 +70,7 @@ public class ApiCalls {
 
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @PostMapping("api/connections")
+    @PostMapping("/connections")
     public Connection addConnection(@RequestBody List<Port> ports){
         Connection conn = null;
         try{
@@ -69,4 +83,16 @@ public class ApiCalls {
         }
     }
 
+    @Override
+    @PostMapping(value = "patchpanels/{id}/ports", consumes = {"text/plain", "application/json"})
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPort(@PathVariable("id") Long id, Port port) {
+        try{
+            patchPanelService.addPort(id,port);
+        }catch(PortNumberAlreadyInListException e){
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT, "Port number already in device list", e);
+        }
+
+    }
 }
