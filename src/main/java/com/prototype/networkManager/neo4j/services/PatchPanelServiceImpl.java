@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.services;
 
+import com.prototype.networkManager.neo4j.domain.DeviceType;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
@@ -60,6 +61,8 @@ public class PatchPanelServiceImpl implements PatchPanelService{
         }
         else {
 	        List<Port> ports = patchPanel.get().getPorts();
+            port.setDevicePlugged(DeviceType.None);
+            port.setPortOnTheUpperElement("None");
 	        if(ports != null){
                 if(helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())){
                     ports.add(port);

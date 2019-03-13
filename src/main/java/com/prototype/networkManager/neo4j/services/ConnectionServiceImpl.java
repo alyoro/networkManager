@@ -6,11 +6,13 @@ import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ConnectionServiceImpl implements ConnectionService {
 
     @Autowired
@@ -26,9 +28,10 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     @Override
     public Connection addConnection(List<Port> ports) {
-        Connection c = new Connection(portRepository.findById(ports.get(0).getId()).get(), portRepository.findById(ports.get(1).getId()).get());
-        return connectionRepository.save(c);
-
+        List<String> vlans = new ArrayList<>();
+        vlans.add("test"); // TODO making vlans
+        vlans.add("test2");
+        return connectionRepository.saveConnection(ports.get(0).getId(), ports.get(1).getId(), vlans);
     }
 
 

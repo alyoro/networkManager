@@ -11,11 +11,13 @@ public interface PortController {
 
     PortService getPortService();
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ports")
     default Iterable<Port> getPorts(){
         return getPortService().getPorts();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ports/{id:\\d+}")
     default Port getPort(@PathVariable("id") Long id){
         try{
@@ -25,6 +27,7 @@ public interface PortController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/ports/{id}")
     default void deletePort(@PathVariable("id") Long id){
         try{

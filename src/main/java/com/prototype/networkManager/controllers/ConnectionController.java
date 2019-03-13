@@ -23,17 +23,16 @@ public class ConnectionController {
     public Iterable<Connection> getConnections(){
         return connectionService.getConnections();
     }
-    
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/connections")
     public Connection addConnection(@RequestBody List<Port> ports){
-        Connection conn = null;
         try{
-            System.out.println(ports);
             return connectionService.addConnection(ports);
         }catch(Exception e){
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"addconnection");
-
         }
     }
 
