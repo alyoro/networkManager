@@ -3,6 +3,7 @@ package com.prototype.networkManager.neo4j.service;
 import com.prototype.networkManager.neo4j.domain.DeviceType;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.exceptions.MaximumPortNumberReachedException;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
 import com.prototype.networkManager.neo4j.repository.PatchPanelRepository;
@@ -56,7 +57,8 @@ public class PatchPanelServiceTest {
     }
 
     @Test
-    public void addPortUniquePortTest() throws PortNumberAlreadyInListException,PatchPanelNotFoundException {
+    public void addPortUniquePortTest() throws PortNumberAlreadyInListException,
+            PatchPanelNotFoundException, MaximumPortNumberReachedException {
         Long id = 1L;
         PatchPanel patchPanel = new PatchPanel("D-10", "101","identifier",
                 "close to door", "desc", 20);
@@ -73,7 +75,8 @@ public class PatchPanelServiceTest {
     }
 
     @Test(expected = PatchPanelNotFoundException.class)
-    public void addPortPatchPanelNotFoundTest() throws PortNumberAlreadyInListException,PatchPanelNotFoundException {
+    public void addPortPatchPanelNotFoundTest() throws PortNumberAlreadyInListException,
+            PatchPanelNotFoundException, MaximumPortNumberReachedException {
         Long id = 2L;
         PatchPanel patchPanel = new PatchPanel("D-10", "101","identifier",
                 "close to door", "desc", 20);
@@ -89,7 +92,8 @@ public class PatchPanelServiceTest {
     }
 
     @Test(expected = PortNumberAlreadyInListException.class)
-    public void addPortNumberAlreadyInListTest() throws PortNumberAlreadyInListException,PatchPanelNotFoundException {
+    public void addPortNumberAlreadyInListTest() throws PortNumberAlreadyInListException,
+            PatchPanelNotFoundException, MaximumPortNumberReachedException {
         Long id = 3L;
         PatchPanel patchPanel = new PatchPanel("D-10", "101","identifier",
                 "close to door", "desc", 20);
@@ -101,6 +105,23 @@ public class PatchPanelServiceTest {
         given(this.patchPanelRepository.findById(id)).willReturn(Optional.of(patchPanel));
 
         Port portNotUnique = new Port(2, DeviceType.None, "", null);
+        patchPanelService.addPort(id,portNotUnique);
+    }
+
+    @Test(expected = MaximumPortNumberReachedException.class)
+    public void addPortCheckingIfMaxPortNumberReachedTest() throws PortNumberAlreadyInListException,
+            PatchPanelNotFoundException, MaximumPortNumberReachedException {
+        Long id = 3L;
+        PatchPanel patchPanel = new PatchPanel("D-10", "101","identifier",
+                "close to door", "desc", 2);
+        List<Port> ports = new ArrayList<>();
+        ports.add(new Port(1, DeviceType.None, "", null));
+        ports.add(new Port(2, DeviceType.None, "", null));
+        patchPanel.setPorts(ports);
+
+        given(this.patchPanelRepository.findById(id)).willReturn(Optional.of(patchPanel));
+
+        Port portNotUnique = new Port(3, DeviceType.None, "", null);
         patchPanelService.addPort(id,portNotUnique);
     }
 }
