@@ -2,6 +2,7 @@ package com.prototype.networkManager.controllers;
 
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.exceptions.MaximumPortNumberReachedException;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
@@ -76,6 +77,8 @@ public class PatchPanelController implements PortController{
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch(PatchPanelNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (MaximumPortNumberReachedException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 }
