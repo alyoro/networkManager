@@ -56,29 +56,29 @@ public class PatchPanelServiceImpl implements PatchPanelService{
     @Override
     public void addPort(Long id, Port port) throws PortNumberAlreadyInListException, PatchPanelNotFoundException, MaximumPortNumberReachedException{
 
-        Optional<PatchPanel> patchPanel = patchPanelRepository.findById(id);
-        if(patchPanel.isEmpty()) {
-            throw new PatchPanelNotFoundException("PatchPanel with id: "+id+" not found.");
-        }
-        else {
-	        List<Port> ports = patchPanel.get().getPorts();
-	        if(patchPanel.get().getNumberOfPorts() == ports.size()){
-	            throw new MaximumPortNumberReachedException("Cant put more ports in this device");
-            }
-            port.setDevicePlugged(DeviceType.None);
-            port.setPortOnTheUpperElement("None");
-	        if(ports != null){
-                if(helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())){
-                    ports.add(port);
-                } else{
-                    throw new PortNumberAlreadyInListException("Port with this number already added to device");
-                }
-	        } else{
-		        ports = new ArrayList<>();
-		        ports.add(port);
-	        }
-	    patchPanel.get().setPorts(ports);
-	    patchPanelRepository.save(patchPanel.get());
-	    }
+//        Optional<PatchPanel> patchPanel = patchPanelRepository.findById(id);
+//        if(patchPanel.isEmpty()) {
+//            throw new PatchPanelNotFoundException("PatchPanel with id: "+id+" not found.");
+//        }
+//        else {
+//	        List<Port> ports = patchPanel.get().getPorts();
+//	        if(patchPanel.get().getNumberOfPorts() == ports.size()){
+//	            throw new MaximumPortNumberReachedException("Cant put more ports in this device");
+//            }
+//            port.setDevicePlugged(DeviceType.None);
+//            port.setPortOnTheUpperElement("None");
+//	        if(ports != null){
+//                if(helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())){
+//                    ports.add(port);
+//                } else{
+//                    throw new PortNumberAlreadyInListException("Port with this number already added to device");
+//                }
+//	        } else{
+//		        ports = new ArrayList<>();
+//		        ports.add(port);
+//	        }
+//	    patchPanel.get().setPorts(ports);
+//	    patchPanelRepository.save(patchPanel.get());
+//	    }
     }
 }
