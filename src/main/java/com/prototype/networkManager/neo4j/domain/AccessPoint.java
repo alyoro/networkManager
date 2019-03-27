@@ -2,7 +2,7 @@ package com.prototype.networkManager.neo4j.domain;
 
 import java.util.List;
 
-public class AccessPoint extends Node {
+public class AccessPoint extends DeviceNode {
 
     private String localization;
     private String ip;

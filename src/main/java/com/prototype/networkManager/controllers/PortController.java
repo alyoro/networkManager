@@ -14,11 +14,6 @@ public interface PortController {
 
     PortService getPortService();
 
-    @CrossOrigin(origins = "http://localhost:8080")
-    @GetMapping(path = "/ports")
-    default Iterable<Port> getPorts(){
-        return getPortService().getPorts();
-    }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "{id:\\d+}/ports")

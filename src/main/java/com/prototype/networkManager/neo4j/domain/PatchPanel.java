@@ -1,6 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
-public class PatchPanel extends Node {
+public class PatchPanel extends DeviceNode {
 
     private String building;
     private String room;

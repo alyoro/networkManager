@@ -13,8 +13,6 @@ public class Node {
     @Id @GeneratedValue
     private Long id;
 
-    private int numberOfPorts;
-
     @Relationship(type = "IS_PORT", direction = Relationship.INCOMING)
     private List<Port> ports;
 
@@ -31,14 +29,6 @@ public class Node {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getNumberOfPorts() {
-        return numberOfPorts;
-    }
-
-    public void setNumberOfPorts(int numberOfPorts) {
-        this.numberOfPorts = numberOfPorts;
     }
 
     public List<Port> getPorts() {

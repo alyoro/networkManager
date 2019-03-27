@@ -1,10 +1,11 @@
 package com.prototype.networkManager.neo4j.services;
 
+
+import com.prototype.networkManager.neo4j.domain.DeviceNode;
 import com.prototype.networkManager.neo4j.domain.DeviceType;
-import com.prototype.networkManager.neo4j.domain.Node;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.*;
-import com.prototype.networkManager.neo4j.repository.NodeRepository;
+import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,14 @@ public class PortServiceImpl implements PortService {
 
     private final PortRepository portRepository;
 
-    private final NodeRepository nodeRepository;
+    private final DeviceNodeRepository deviceNodeRepository;
 
     private final HelperFunctions helperFunctions;
 
     @Autowired
-    public PortServiceImpl(PortRepository portRepository, NodeRepository nodeRepository, HelperFunctions helperFunctions) {
+    public PortServiceImpl(PortRepository portRepository, DeviceNodeRepository deviceNodeRepository, HelperFunctions helperFunctions) {
         this.portRepository = portRepository;
-        this.nodeRepository = nodeRepository;
+        this.deviceNodeRepository = deviceNodeRepository;
         this.helperFunctions = helperFunctions;
     }
 
@@ -61,29 +62,30 @@ public class PortServiceImpl implements PortService {
     @Override
     public void createPort(Long id, Port port)
             throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException {
-        Optional<Node> node = nodeRepository.findById(id);
+        Optional<DeviceNode> node = deviceNodeRepository.findById(id);
         if(node.isEmpty()) {
             throw new DeviceNotFoundException("Device with id: "+id+" not found.");
         }
         else {
             List<Port> ports = node.get().getPorts();
-            if(node.get().getNumberOfPorts() == ports.size()){
-                throw new MaximumPortNumberReachedException("Cant put more ports in this device");
-            }
             port.setDevicePlugged(DeviceType.None);
             port.setPortOnTheUpperElement("None");
             if(ports != null){
+                if(node.get().getNumberOfPorts() == ports.size()){
+                    throw new MaximumPortNumberReachedException("Cant put more ports in this device");
+                }
                 if(helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())){
                     ports.add(port);
                 } else{
                     throw new PortNumberAlreadyInListException("Port with this number already added to device");
                 }
             } else{
+                // TODO maybe need checking size of possible array
                 ports = new ArrayList<>();
                 ports.add(port);
             }
             node.get().setPorts(ports);
-            nodeRepository.save(node.get());
+            deviceNodeRepository.save(node.get());
         }
     }
 }

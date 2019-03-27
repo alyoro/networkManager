@@ -2,7 +2,7 @@ package com.prototype.networkManager.neo4j.domain;
 
 import java.util.List;
 
-public class Server extends Node {
+public class Server extends DeviceNode {
 
     private String localization;
     private String ip;

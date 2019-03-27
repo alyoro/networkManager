@@ -1,6 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
-public class RoomSocket extends Node {
+public class RoomSocket extends DeviceNode {
 
     private String building;
     private String room;

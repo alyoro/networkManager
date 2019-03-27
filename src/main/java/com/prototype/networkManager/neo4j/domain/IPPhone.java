@@ -2,7 +2,7 @@ package com.prototype.networkManager.neo4j.domain;
 
 import java.util.List;
 
-public class IPPhone extends Node {
+public class IPPhone extends DeviceNode {
 
     private String localization;
     private String ip;

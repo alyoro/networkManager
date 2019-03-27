@@ -2,7 +2,7 @@ package com.prototype.networkManager.neo4j.domain;
 
 import java.util.List;
 
-public class Printer extends Node {
+public class Printer extends DeviceNode {
 
     private String localization;
     private String ip;
