@@ -84,7 +84,8 @@ public class PatchPanelController implements PortController{
     @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @PostMapping("/api/patchpanels/{id}/ports")
-    public void createPort(@PathVariable("id") Long id, @RequestBody Port port) {
-        PortController.super.createPort(id, port);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Port createPort(@PathVariable("id") Long id, @RequestBody Port port) {
+        return PortController.super.createPort(id, port);
     }
 }

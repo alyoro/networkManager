@@ -43,9 +43,10 @@ public interface PortController {
 
     @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping(path = "{id:\\d+}/ports")
-    default void createPort(@PathVariable("id") Long id, @RequestBody Port port){
+    @ResponseStatus(HttpStatus.CREATED)
+    default Port createPort(@PathVariable("id") Long id, @RequestBody Port port){
         try{
-            getPortService().createPort(id, port);
+            return getPortService().createPort(id, port);
         }catch(DeviceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }catch(MaximumPortNumberReachedException | PortNumberAlreadyInListException e){

@@ -12,5 +12,5 @@ public interface PortService {
     Iterable<Port> getPorts();
     Iterable<Port> getPorts(Long id);
     void deletePort(Long id) throws PortNotFoundException;
-    void createPort(Long deviceID, Port port) throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException;
+    Port createPort(Long deviceID, Port port) throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException;
 }

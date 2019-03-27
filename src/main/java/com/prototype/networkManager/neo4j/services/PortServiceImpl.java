@@ -60,7 +60,7 @@ public class PortServiceImpl implements PortService {
     }
 
     @Override
-    public void createPort(Long id, Port port)
+    public Port createPort(Long id, Port port)
             throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException {
         Optional<DeviceNode> node = deviceNodeRepository.findById(id);
         if(node.isEmpty()) {
@@ -86,6 +86,7 @@ public class PortServiceImpl implements PortService {
             }
             node.get().setPorts(ports);
             deviceNodeRepository.save(node.get());
+            return port;
         }
     }
 }

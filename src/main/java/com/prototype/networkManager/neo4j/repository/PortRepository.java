@@ -8,6 +8,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface PortRepository extends PagingAndSortingRepository<Port, Long> {
 
-    @Query("MATCH (p:Port),(n) WHERE ID(n)={0} [c:CONNECTION]-(p)-[:IS_PORT]->(n) RETURN p")
+    @Query("MATCH (p:Port),(n) WHERE ID(n)={0} (p)-[:IS_PORT]->(n) RETURN p")
     Iterable<Port> getPorts(Long id);
 }
