@@ -6,15 +6,15 @@ public class AccessPoint extends DeviceNode {
 
     private String localization;
     private String ip;
-    private List<String> vlans;
+//    private List<String> vlans;
 
     public AccessPoint() {
     }
 
-    public AccessPoint(String localization, String ip, List<String> vlans) {
+    public AccessPoint(String localization, String ip/*, List<String> vlans*/) {
         this.localization = localization;
         this.ip = ip;
-        this.vlans = vlans;
+//        this.vlans = vlans;
     }
 
     public String getLocalization() {
@@ -33,11 +33,11 @@ public class AccessPoint extends DeviceNode {
         this.ip = ip;
     }
 
-    public List<String> getVlans() {
-        return vlans;
-    }
-
-    public void setVlans(List<String> vlans) {
-        this.vlans = vlans;
-    }
+//    public List<String> getVlans() {
+//        return vlans;
+//    }
+//
+//    public void setVlans(List<String> vlans) {
+//        this.vlans = vlans;
+//    }
 }
