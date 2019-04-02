@@ -22,13 +22,11 @@ public class PatchPanelController implements PortController{
         this.portService = portService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/api/patchpanels")
     Iterable<PatchPanel> getPatchPanels(){
         return patchPanelService.getPatchPanels();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/api/patchpanels/{id}")
     PatchPanel getPatchPanel(@PathVariable("id") Long id){
         try{
@@ -38,14 +36,12 @@ public class PatchPanelController implements PortController{
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/api/patchpanels")
     @ResponseStatus(HttpStatus.CREATED)
     PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel){
         return patchPanelService.createPatchPanel(patchPanel);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/api/patchpanels/{id}")
     void deletePatchPanel(@PathVariable("id") Long id){
         try{
@@ -61,8 +57,7 @@ public class PatchPanelController implements PortController{
     public PortService getPortService() {
         return portService;
     }
-
-    @CrossOrigin(origins = "http://localhost:8080")
+    
     @Override
     @GetMapping("/api/patchpanels/{id}/ports")
     public Iterable<Port> getPorts(@PathVariable("id") Long id) {
@@ -81,7 +76,6 @@ public class PatchPanelController implements PortController{
         PortController.super.deletePort(portId);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @PostMapping("/api/patchpanels/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)

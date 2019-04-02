@@ -21,13 +21,12 @@ public class SwitchController implements PortController{
         this.portService = portService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/api/switches")
     Iterable<Switch> getSwitches(){
         return switchService.getSwitches();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
+
     @GetMapping("/api/switches/{id}")
     Switch getSwitch(@PathVariable("id") Long id){
         try{
@@ -37,14 +36,13 @@ public class SwitchController implements PortController{
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/api/switches")
     @ResponseStatus(HttpStatus.CREATED)
     Switch createSwitch(@RequestBody Switch switchDevice){
         return switchService.createSwitch(switchDevice);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
+
     @DeleteMapping("/api/switches/{id}")
     void deleteSwitch(@PathVariable("id") Long id){
         try{
@@ -63,7 +61,6 @@ public class SwitchController implements PortController{
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @GetMapping("/api/switches/{id}/ports")
     public Iterable<Port> getPorts(@PathVariable("id") Long id) {

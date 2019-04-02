@@ -21,7 +21,6 @@ public class RoomSocketController implements PortController {
         this.portService = portService;
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/api/roomsockets")
     Iterable<RoomSocket> getRoomSocket(){
         return roomSocketService.getRoomSockets();
@@ -37,14 +36,12 @@ public class RoomSocketController implements PortController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/api/roomsockets")
     @ResponseStatus(HttpStatus.CREATED)
     RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice){
         return roomSocketService.createRoomSocket(switchDevice);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/api/roomsockets/{id}")
     void deleteRoomSocket(@PathVariable("id") Long id){
         try{
@@ -63,7 +60,6 @@ public class RoomSocketController implements PortController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @GetMapping("/api/roomsockets/{id}/ports")
     public Iterable<Port> getPorts(@PathVariable("id") Long id) {
@@ -82,7 +78,6 @@ public class RoomSocketController implements PortController {
         PortController.super.deletePort(portId);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @PostMapping("/api/roomsockets/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)

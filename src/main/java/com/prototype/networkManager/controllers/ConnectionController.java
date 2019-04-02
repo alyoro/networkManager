@@ -18,13 +18,11 @@ public class ConnectionController {
     @Autowired
     ConnectionService connectionService;
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/connections")
     public Iterable<Connection> getConnections(){
         return connectionService.getConnections();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/connections")
     public Connection addConnection(@RequestBody List<Port> ports){
