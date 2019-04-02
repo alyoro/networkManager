@@ -4,10 +4,12 @@ import com.prototype.networkManager.neo4j.domain.Switch;
 import com.prototype.networkManager.neo4j.exceptions.SwitchNotFoundException;
 import com.prototype.networkManager.neo4j.repository.SwitchRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional
 public class SwitchServiceImpl implements SwitchService {
 
     private final SwitchRepository switchRepository;
@@ -22,7 +24,7 @@ public class SwitchServiceImpl implements SwitchService {
         if(switchOptional.isPresent()){
             return switchOptional.get();
         }else{
-            throw new SwitchNotFoundException("Switch wid id: "+id+" not found.");
+            throw new SwitchNotFoundException("Switch with id: "+id+" not found.");
         }
     }
 

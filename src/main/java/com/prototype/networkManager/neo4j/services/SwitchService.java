@@ -1,6 +1,5 @@
 package com.prototype.networkManager.neo4j.services;
 
-
 import com.prototype.networkManager.neo4j.domain.Switch;
 import com.prototype.networkManager.neo4j.exceptions.SwitchNotFoundException;
 
