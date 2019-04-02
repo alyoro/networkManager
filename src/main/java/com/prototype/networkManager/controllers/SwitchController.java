@@ -26,7 +26,6 @@ public class SwitchController implements PortController{
         return switchService.getSwitches();
     }
 
-
     @GetMapping("/api/switches/{id}")
     Switch getSwitch(@PathVariable("id") Long id){
         try{
@@ -42,7 +41,6 @@ public class SwitchController implements PortController{
         return switchService.createSwitch(switchDevice);
     }
 
-
     @DeleteMapping("/api/switches/{id}")
     void deleteSwitch(@PathVariable("id") Long id){
         try{
@@ -52,14 +50,12 @@ public class SwitchController implements PortController{
         }
     }
 
-
     //-------------------- PortController --------------------
 
     @Override
     public PortService getPortService() {
         return portService;
     }
-
 
     @Override
     @GetMapping("/api/switches/{id}/ports")
@@ -79,7 +75,6 @@ public class SwitchController implements PortController{
         PortController.super.deletePort(portId);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @PostMapping("/api/switches/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)

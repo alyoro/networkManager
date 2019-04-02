@@ -26,7 +26,6 @@ public class RoomSocketController implements PortController {
         return roomSocketService.getRoomSockets();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/api/roomsockets/{id}")
     RoomSocket getRoomSocket(@PathVariable("id") Long id){
         try{
