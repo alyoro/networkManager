@@ -1,5 +1,6 @@
 package com.prototype.networkManager.controllers;
 
+import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.DeviceNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.MaximumPortNumberReachedException;
@@ -15,13 +16,11 @@ public interface PortController {
     PortService getPortService();
 
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "{id:\\d+}/ports")
     default Iterable<Port> getPorts(@PathVariable("id") Long id){
         return getPortService().getPorts(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ports/{id:\\d+}")
     default Port getPort(@PathVariable("id") Long id){
         try{
@@ -31,17 +30,16 @@ public interface PortController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/ports/{id:\\d+}")
-    default void deletePort(@PathVariable("id") Long id){
+    default None deletePort(@PathVariable("id") Long id){
         try{
             getPortService().deletePort(id);
+            return new None();
         }catch(PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping(path = "{id:\\d+}/ports")
     @ResponseStatus(HttpStatus.CREATED)
     default Port createPort(@PathVariable("id") Long id, @RequestBody Port port){

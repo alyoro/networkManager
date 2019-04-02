@@ -1,11 +1,13 @@
 package com.prototype.networkManager.controllers;
 
+import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Server;
 import com.prototype.networkManager.neo4j.exceptions.ServerNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.ServerService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -71,8 +73,8 @@ public class ServerController implements PortController{
 
     @Override
     @DeleteMapping("/api/servers/{id}/ports/{portId}")
-    public void deletePort(@PathVariable("portId") Long portId) {
-        PortController.super.deletePort(portId);
+    public None deletePort(@PathVariable("portId") Long portId) {
+        return PortController.super.deletePort(portId);
     }
 
     @Override
