@@ -1,7 +1,9 @@
 package com.prototype.networkManager.neo4j.services;
 
+import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.RoomSocket;
 import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
+import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.RoomSocketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +16,12 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
     private final RoomSocketRepository roomSocketRepository;
 
-    public RoomSocketServiceImpl(RoomSocketRepository roomSocketRepository){
-        this.roomSocketRepository = roomSocketRepository;
-    }
+    private final PortRepository portRepository;
 
+    public RoomSocketServiceImpl(RoomSocketRepository roomSocketRepository, PortRepository portRepository) {
+        this.roomSocketRepository = roomSocketRepository;
+        this.portRepository = portRepository;
+    }
 
     @Override
     public RoomSocket getRoomSocket(Long id) throws RoomSocketNotFoundException {
@@ -36,9 +40,15 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
     @Override
     public void deleteRoomSocket(Long id) throws RoomSocketNotFoundException {
-        if(roomSocketRepository.findById(id).isPresent()){
+        Optional<RoomSocket> roomSocketOptional = roomSocketRepository.findById(id);
+        if(roomSocketOptional.isPresent()){
+            if(!roomSocketOptional.get().getPorts().isEmpty()){
+                for(Port port: roomSocketOptional.get().getPorts()){
+                    portRepository.delete(port);
+                }
+            }
             roomSocketRepository.deleteById(id);
-        }else{
+        } else {
             throw new RoomSocketNotFoundException("RoomSocket with id: "+id+" not found.");
         }
     }
