@@ -7,7 +7,6 @@ import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 

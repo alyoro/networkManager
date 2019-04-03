@@ -31,7 +31,11 @@ public class ConnectionServiceImpl implements ConnectionService {
         List<String> vlans = new ArrayList<>();
         vlans.add("test"); // TODO making vlans
         vlans.add("test2");
-        return connectionRepository.saveConnection(ports.get(0).getId(), ports.get(1).getId(), vlans);
+        if(ports.get(0).getConnections().isEmpty() && ports.get(1).getConnections().isEmpty()){
+            return connectionRepository.saveConnection(ports.get(0).getId(), ports.get(1).getId(), vlans);
+        }
+        //TODO add exception
+        return new Connection();
     }
 
 
