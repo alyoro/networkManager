@@ -1,5 +1,10 @@
 package com.prototype.networkManager.neo4j.domain;
 
+import org.neo4j.ogm.annotation.Labels;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PatchPanel extends DeviceNode {
 
     private String building;
@@ -7,6 +12,9 @@ public class PatchPanel extends DeviceNode {
     private String identifier;
     private String localization;
     private String description;
+
+    @Labels
+    private List<String> labels = new ArrayList<>();
 
 
     public PatchPanel() {
@@ -60,4 +68,11 @@ public class PatchPanel extends DeviceNode {
         this.description = description;
     }
 
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
+    }
 }

@@ -80,9 +80,12 @@ public class PortServiceImpl implements PortService {
                     throw new PortNumberAlreadyInListException("Port with this number already added to device");
                 }
             } else{
-                // TODO maybe need checking size of possible array
-                ports = new ArrayList<>();
-                ports.add(port);
+                if(node.get().getNumberOfPorts() > 0) {
+                    ports = new ArrayList<>();
+                    ports.add(port);
+                } else {
+                    throw new MaximumPortNumberReachedException("Cant put more ports in this device");
+                }
             }
             node.get().setPorts(ports);
             deviceNodeRepository.save(node.get());
