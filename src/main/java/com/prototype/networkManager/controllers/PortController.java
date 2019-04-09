@@ -15,14 +15,15 @@ public interface PortController {
 
     PortService getPortService();
 
-
     @GetMapping(path = "{id:\\d+}/ports")
-    default Iterable<Port> getPorts(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default Iterable<Port> getPorts(@PathVariable Long id){
         return getPortService().getPorts(id);
     }
 
     @GetMapping(path = "/ports/{id:\\d+}")
-    default Port getPort(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default Port getPort(@PathVariable Long id){
         try{
             return getPortService().getPort(id);
         }catch (PortNotFoundException e){
@@ -31,7 +32,8 @@ public interface PortController {
     }
 
     @DeleteMapping(path = "/ports/{id:\\d+}")
-    default None deletePort(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default None deletePort(@PathVariable Long id){
         try{
             getPortService().deletePort(id);
             return new None();
@@ -42,7 +44,7 @@ public interface PortController {
 
     @PostMapping(path = "{id:\\d+}/ports")
     @ResponseStatus(HttpStatus.CREATED)
-    default Port createPort(@PathVariable("id") Long id, @RequestBody Port port){
+    default Port createPort(@PathVariable Long id, @RequestBody Port port){
         try{
             return getPortService().createPort(id, port);
         }catch(DeviceNotFoundException e){

@@ -2,55 +2,55 @@ package com.prototype.networkManager.controllers;
 
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
-import com.prototype.networkManager.neo4j.domain.RoomSocket;
-import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
+import com.prototype.networkManager.neo4j.domain.Printer;
+import com.prototype.networkManager.neo4j.exceptions.PrinterNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
-import com.prototype.networkManager.neo4j.services.RoomSocketService;
+import com.prototype.networkManager.neo4j.services.PrinterService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-@RestController
-public class RoomSocketController implements PortController {
+public class PrinterController implements PortController {
 
-    private final RoomSocketService roomSocketService;
+    private final PrinterService printerService;
 
     private final PortService portService;
 
-    public RoomSocketController(RoomSocketService roomSocketService, PortService portService) {
-        this.roomSocketService = roomSocketService;
+    public PrinterController(PrinterService printerService, PortService portService) {
+        this.printerService = printerService;
         this.portService = portService;
     }
 
-    @GetMapping("/api/roomsockets")
-    Iterable<RoomSocket> getRoomSocket(){
-        return roomSocketService.getRoomSockets();
+    @GetMapping("/api/printers")
+    @ResponseStatus(HttpStatus.OK)
+    Iterable<Printer> getPrinters(){
+        return printerService.getPrinters();
     }
 
-    @GetMapping("/api/roomsockets/{id}")
+    @GetMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    RoomSocket getRoomSocket(@PathVariable Long id){
+    Printer getPrinter(@PathVariable Long id){
         try{
-            return roomSocketService.getRoomSocket(id);
-        }catch(RoomSocketNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-    @DeleteMapping("/api/roomsockets/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    void deleteRoomSocket(@PathVariable Long id){
-        try{
-            roomSocketService.deleteRoomSocket(id);
-        }catch(RoomSocketNotFoundException e){
+            return printerService.getPrinter(id);
+        } catch (PrinterNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @PostMapping("/api/roomsockets")
+    @PostMapping("/api/printers")
     @ResponseStatus(HttpStatus.CREATED)
-    RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice){
-        return roomSocketService.createRoomSocket(switchDevice);
+    Printer createPrinter(@RequestBody Printer printer){
+        return printerService.createPrinter(printer);
+    }
+
+    @DeleteMapping("/api/printers/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void deletePrinter(@PathVariable Long id){
+        try{
+            printerService.deletePrinter(id);
+        }catch(PrinterNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     //-------------------- PortController --------------------
@@ -60,33 +60,33 @@ public class RoomSocketController implements PortController {
         return portService;
     }
 
-
     @Override
-    @GetMapping("/api/roomsockets/{id}/ports")
+    @GetMapping("/api/printers/{id}/ports")
     @ResponseStatus(HttpStatus.OK)
     public Iterable<Port> getPorts(@PathVariable Long id) {
         return PortController.super.getPorts(id);
     }
 
     @Override
-    @GetMapping("/api/roomsockets/{id}/ports/{portId}")
+    @GetMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
     public Port getPort(@PathVariable Long portId) {
         return PortController.super.getPort(portId);
     }
 
     @Override
-    @DeleteMapping("/api/roomsockets/{id}/ports/{portId}")
-
+    @DeleteMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
     public None deletePort(@PathVariable Long portId) {
-        return PortController.super.deletePort(portId);
+        return
+                PortController.super.deletePort(portId);
     }
 
     @Override
-    @PostMapping("/api/roomsockets/{id}/ports")
+    @PostMapping("/api/printers/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
     public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
+
 }

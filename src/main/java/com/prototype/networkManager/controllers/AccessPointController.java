@@ -23,11 +23,13 @@ public class AccessPointController implements PortController {
     }
 
     @GetMapping("/api/accesspoints")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<AccessPoint> getAccessPoints(){
         return accessPointService.getAccessPoints();
     }
 
     @GetMapping("/api/accesspoints/{id}")
+    @ResponseStatus(HttpStatus.OK)
     AccessPoint getAccesPoint(@PathVariable Long id){
         try{
             return accessPointService.getAccessPoint(id);
@@ -43,6 +45,7 @@ public class AccessPointController implements PortController {
     }
 
     @DeleteMapping("/api/accesspoints/{id}")
+    @ResponseStatus(HttpStatus.OK)
     void deleteAccessPoint(@PathVariable Long id){
         try{
             accessPointService.deleteAccessServer(id);
@@ -60,18 +63,21 @@ public class AccessPointController implements PortController {
 
     @Override
     @GetMapping("/api/accesspoints/{id}/ports")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Port> getPorts(@PathVariable Long id) {
         return PortController.super.getPorts(id);
     }
 
     @Override
     @GetMapping("/api/accesspoints/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
     public Port getPort(@PathVariable Long portId) {
         return PortController.super.getPort(portId);
     }
 
     @Override
     @DeleteMapping("/api/accesspoints/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
     public None deletePort(@PathVariable Long portId) {
         return PortController.super.deletePort(portId);
     }

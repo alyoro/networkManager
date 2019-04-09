@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-@RepositoryRestResource
+@RepositoryRestResource(exported = false)
 public interface ConnectionRepository extends PagingAndSortingRepository<Connection, Long> {
 
     @Query("MATCH (pM:Port)-[:IS_PORT]->(deviceMaster),(pS:Port) where ID(pM)={0} and ID(pS)={1} " +
