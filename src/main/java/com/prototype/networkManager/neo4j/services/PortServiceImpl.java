@@ -47,7 +47,7 @@ public class PortServiceImpl implements PortService {
 
     @Override
     public Iterable<Port> getPorts(Long id) {
-        return portRepository.getPorts(id);
+        return deviceNodeRepository.getPorts(id);
     }
 
     @Override

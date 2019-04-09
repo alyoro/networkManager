@@ -1,10 +1,11 @@
 package com.prototype.networkManager.neo4j.domain;
 
 import org.neo4j.ogm.annotation.Relationship;
+import org.springframework.data.neo4j.annotation.QueryResult;
 
 import java.util.List;
 
-
+@QueryResult
 public class Port extends Node{
 
     private int portNumber;
