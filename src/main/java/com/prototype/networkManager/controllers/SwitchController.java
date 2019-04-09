@@ -22,15 +22,26 @@ public class SwitchController implements PortController{
     }
 
     @GetMapping("/api/switches")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<Switch> getSwitches(){
         return switchService.getSwitches();
     }
 
 
     @GetMapping("/api/switches/{id}")
-    Switch getSwitch(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    Switch getSwitch(@PathVariable Long id){
         try{
             return switchService.getSwitch(id);
+        }catch(SwitchNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @DeleteMapping("/api/switches/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void deleteSwitch(@PathVariable Long id){
+        try{
+            switchService.deleteSwitch(id);
         }catch(SwitchNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -42,17 +53,6 @@ public class SwitchController implements PortController{
         return switchService.createSwitch(switchDevice);
     }
 
-
-    @DeleteMapping("/api/switches/{id}")
-    void deleteSwitch(@PathVariable("id") Long id){
-        try{
-            switchService.deleteSwitch(id);
-        }catch(SwitchNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-
     //-------------------- PortController --------------------
 
     @Override
@@ -63,27 +63,29 @@ public class SwitchController implements PortController{
 
     @Override
     @GetMapping("/api/switches/{id}/ports")
-    public Iterable<Port> getPorts(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Port> getPorts(@PathVariable Long id) {
         return PortController.super.getPorts(id);
     }
 
     @Override
     @GetMapping("/api/switches/{id}/ports/{portId}")
-    public Port getPort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public Port getPort(@PathVariable Long portId) {
         return PortController.super.getPort(portId);
     }
 
     @Override
     @DeleteMapping("/api/switches/{id}/ports/{portId}")
-    public void deletePort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePort(@PathVariable Long portId) {
         PortController.super.deletePort(portId);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @Override
     @PostMapping("/api/switches/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
-    public Port createPort(@PathVariable("id") Long id, @RequestBody Port port) {
+    public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
 }

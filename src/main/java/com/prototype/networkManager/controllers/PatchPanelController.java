@@ -23,23 +23,19 @@ public class PatchPanelController implements PortController{
     }
 
     @GetMapping("/api/patchpanels")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<PatchPanel> getPatchPanels(){
         return patchPanelService.getPatchPanels();
     }
 
     @GetMapping("/api/patchpanels/{id}")
-    PatchPanel getPatchPanel(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    PatchPanel getPatchPanel(@PathVariable Long id){
         try{
             return patchPanelService.getPatchPanel(id);
         } catch(PatchPanelNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-    }
-
-    @PostMapping("/api/patchpanels")
-    @ResponseStatus(HttpStatus.CREATED)
-    PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel){
-        return patchPanelService.createPatchPanel(patchPanel);
     }
 
     @DeleteMapping("/api/patchpanels/{id}")
@@ -52,6 +48,12 @@ public class PatchPanelController implements PortController{
         }
     }
 
+    @PostMapping("/api/patchpanels")
+    @ResponseStatus(HttpStatus.CREATED)
+    PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel){
+        return patchPanelService.createPatchPanel(patchPanel);
+    }
+
     //-------------------- PortController --------------------
 
     @Override
@@ -61,26 +63,29 @@ public class PatchPanelController implements PortController{
 
     @Override
     @GetMapping("/api/patchpanels/{id}/ports")
-    public Iterable<Port> getPorts(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Port> getPorts(@PathVariable Long id) {
         return PortController.super.getPorts(id);
     }
 
     @Override
     @GetMapping("/api/patchpanels/{id}/ports/{portId}")
-    public Port getPort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public Port getPort(@PathVariable Long portId) {
         return PortController.super.getPort(portId);
     }
 
     @Override
     @DeleteMapping("/api/patchpanels/{id}/ports/{portId}")
-    public void deletePort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePort(@PathVariable Long portId) {
         PortController.super.deletePort(portId);
     }
 
     @Override
     @PostMapping("/api/patchpanels/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
-    public Port createPort(@PathVariable("id") Long id, @RequestBody Port port) {
+    public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
 }

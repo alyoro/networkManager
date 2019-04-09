@@ -22,12 +22,14 @@ public class ServerController implements PortController{
     }
 
     @GetMapping("/api/servers")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<Server> getServers(){
         return serverService.getServers();
     }
 
     @GetMapping("/api/servers/{id}")
-    Server getServer(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    Server getServer(@PathVariable Long id){
         try{
             return serverService.getServer(id);
         } catch(ServerNotFoundException e){
@@ -37,12 +39,13 @@ public class ServerController implements PortController{
 
     @PostMapping("/api/servers")
     @ResponseStatus(HttpStatus.CREATED)
-    Server createServer(@RequestBody Server patchPanel){
-        return serverService.createServer(patchPanel);
+    Server createServer(@RequestBody Server server){
+        return serverService.createServer(server);
     }
 
     @DeleteMapping("/api/servers/{id}")
-    void deleteServer(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    void deleteServer(@PathVariable Long id){
         try{
             serverService.deleteServer(id);
         }catch(ServerNotFoundException e){
@@ -59,26 +62,29 @@ public class ServerController implements PortController{
 
     @Override
     @GetMapping("/api/servers/{id}/ports")
-    public Iterable<Port> getPorts(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Iterable<Port> getPorts(@PathVariable Long id) {
         return PortController.super.getPorts(id);
     }
 
     @Override
     @GetMapping("/api/servers/{id}/ports/{portId}")
-    public Port getPort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public Port getPort(@PathVariable Long portId) {
         return PortController.super.getPort(portId);
     }
 
     @Override
     @DeleteMapping("/api/servers/{id}/ports/{portId}")
-    public void deletePort(@PathVariable("portId") Long portId) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePort(@PathVariable Long portId) {
         PortController.super.deletePort(portId);
     }
 
     @Override
     @PostMapping("/api/servers/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
-    public Port createPort(@PathVariable("id") Long id, @RequestBody Port port) {
+    public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
 }

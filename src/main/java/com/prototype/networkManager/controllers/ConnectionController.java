@@ -19,6 +19,7 @@ public class ConnectionController {
     ConnectionService connectionService;
 
     @GetMapping("/connections")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<Connection> getConnections(){
         return connectionService.getConnections();
     }
@@ -30,7 +31,7 @@ public class ConnectionController {
             return connectionService.addConnection(ports);
         }catch(Exception e){
             e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"addconnection");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
         }
     }
 

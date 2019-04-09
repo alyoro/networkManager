@@ -14,16 +14,15 @@ public interface PortController {
 
     PortService getPortService();
 
-
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "{id:\\d+}/ports")
-    default Iterable<Port> getPorts(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default Iterable<Port> getPorts(@PathVariable Long id){
         return getPortService().getPorts(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/ports/{id:\\d+}")
-    default Port getPort(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default Port getPort(@PathVariable Long id){
         try{
             return getPortService().getPort(id);
         }catch (PortNotFoundException e){
@@ -31,9 +30,9 @@ public interface PortController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/ports/{id:\\d+}")
-    default void deletePort(@PathVariable("id") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    default void deletePort(@PathVariable Long id){
         try{
             getPortService().deletePort(id);
         }catch(PortNotFoundException e){
@@ -41,7 +40,6 @@ public interface PortController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping(path = "{id:\\d+}/ports")
     @ResponseStatus(HttpStatus.CREATED)
     default Port createPort(@PathVariable("id") Long id, @RequestBody Port port){
