@@ -1,22 +1,20 @@
 package com.prototype.networkManager.neo4j.domain;
 
-public class RoomSocket extends Node {
+public class RoomSocket extends DeviceNode {
 
     private String building;
     private String room;
     private String identifier;
     private String description;
-    private int numberOfPorts;
 
     public RoomSocket() {
     }
 
-    public RoomSocket(String building, String room, String identifier, String description, int numberOfPorts) {
+    public RoomSocket(String building, String room, String identifier, String description) {
         this.building = building;
         this.room = room;
         this.identifier = identifier;
         this.description = description;
-        this.numberOfPorts = numberOfPorts;
     }
 
     public String getBuilding() {
@@ -49,13 +47,5 @@ public class RoomSocket extends Node {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getNumberOfPorts() {
-        return numberOfPorts;
-    }
-
-    public void setNumberOfPorts(int numberOfPorts) {
-        this.numberOfPorts = numberOfPorts;
     }
 }

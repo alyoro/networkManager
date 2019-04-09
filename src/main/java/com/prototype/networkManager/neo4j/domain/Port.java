@@ -4,10 +4,13 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
 
-public class Port extends Node {
+
+public class Port extends Node{
 
     private int portNumber;
+
     private DeviceType devicePlugged;
+
     private String portOnTheUpperElement;
 
     @Relationship(type = "CONNECTION", direction = Relationship.UNDIRECTED)

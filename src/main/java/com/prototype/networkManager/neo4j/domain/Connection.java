@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
+
 import org.neo4j.ogm.annotation.RelationshipEntity;
 
 import java.util.List;
@@ -10,6 +11,12 @@ public class Connection extends Edge {
     private List<String> vlans;
 
     public Connection() {
+    }
+
+    public Connection(Port pM, Port pS){
+        super();
+        this.setStartNode(pS);
+        this.setEndNode(pM);
     }
 
     public Connection(List<String> vlans) {
@@ -23,4 +30,5 @@ public class Connection extends Edge {
     public void setVlans(List<String> vlans) {
         this.vlans = vlans;
     }
+
 }

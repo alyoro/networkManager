@@ -1,21 +1,19 @@
 package com.prototype.networkManager.neo4j.domain;
 
-public class Switch extends Node {
+public class Switch extends DeviceNode {
 
     private String identifier;
     private String localization;
     private String dateOfPurchase;
-    private int numberOfPorts;
     private String managementIP;
 
     public Switch() {
     }
 
-    public Switch(String identifier, String localization, String dateOfPurchase, int numberOfPorts, String managementIP) {
+    public Switch(String identifier, String localization, String dateOfPurchase, String managementIP) {
         this.identifier = identifier;
         this.localization = localization;
         this.dateOfPurchase = dateOfPurchase;
-        this.numberOfPorts = numberOfPorts;
         this.managementIP = managementIP;
     }
 
@@ -41,14 +39,6 @@ public class Switch extends Node {
 
     public void setDateOfPurchase(String dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
-    }
-
-    public int getNumberOfPorts() {
-        return numberOfPorts;
-    }
-
-    public void setNumberOfPorts(int numberOfPorts) {
-        this.numberOfPorts = numberOfPorts;
     }
 
     public String getManagementIP() {

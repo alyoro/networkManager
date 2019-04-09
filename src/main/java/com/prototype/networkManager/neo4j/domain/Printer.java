@@ -2,19 +2,19 @@ package com.prototype.networkManager.neo4j.domain;
 
 import java.util.List;
 
-public class Printer extends Node {
+public class Printer extends DeviceNode {
 
     private String localization;
     private String ip;
-    private List<String> vlans;
+//    private List<String> vlans;
 
     public Printer() {
     }
 
-    public Printer(String localization, String ip, List<String> vlans) {
+    public Printer(String localization, String ip/*, List<String> vlans*/) {
         this.localization = localization;
         this.ip = ip;
-        this.vlans = vlans;
+//        this.vlans = vlans;
     }
 
     public String getLocalization() {
@@ -33,11 +33,11 @@ public class Printer extends Node {
         this.ip = ip;
     }
 
-    public List<String> getVlans() {
-        return vlans;
-    }
-
-    public void setVlans(List<String> vlans) {
-        this.vlans = vlans;
-    }
+//    public List<String> getVlans() {
+//        return vlans;
+//    }
+//
+//    public void setVlans(List<String> vlans) {
+//        this.vlans = vlans;
+//    }
 }

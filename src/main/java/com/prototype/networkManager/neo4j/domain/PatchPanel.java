@@ -1,31 +1,31 @@
 package com.prototype.networkManager.neo4j.domain;
 
-import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.Labels;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PatchPanel extends Node {
+public class PatchPanel extends DeviceNode {
 
     private String building;
     private String room;
     private String identifier;
     private String localization;
     private String description;
-    private int numberOfPorts;
 
-    @Relationship(type = "IS_PORT", direction = Relationship.INCOMING)
-    private List<Port> ports;
+    @Labels
+    private List<String> labels = new ArrayList<>();
+
 
     public PatchPanel() {
     }
 
-    public PatchPanel(String building, String room, String identifier, String localization, String description, int numberOfPorts) {
+    public PatchPanel(String building, String room, String identifier, String localization, String description) {
         this.building = building;
         this.room = room;
         this.identifier = identifier;
         this.localization = localization;
         this.description = description;
-        this.numberOfPorts = numberOfPorts;
     }
 
     public String getBuilding() {
@@ -68,19 +68,11 @@ public class PatchPanel extends Node {
         this.description = description;
     }
 
-    public int getNumberOfPorts() {
-        return numberOfPorts;
+    public List<String> getLabels() {
+        return labels;
     }
 
-    public void setNumberOfPorts(int numberOfPorts) {
-        this.numberOfPorts = numberOfPorts;
-    }
-
-    public List<Port> getPorts() {
-        return ports;
-    }
-
-    public void setPorts(List<Port> ports) {
-        this.ports = ports;
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
     }
 }
