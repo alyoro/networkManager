@@ -88,4 +88,18 @@ public class ServerController implements PortController{
     public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
+
+    @Override
+    @PutMapping("/api/servers/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port updatePort(@PathVariable Long portId, @RequestBody Port port) {
+        return PortController.super.updatePort(portId, port);
+    }
+
+    @Override
+    @PatchMapping("/api/servers/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port changeStatusPort(@PathVariable Long portId) {
+        return PortController.super.changeStatusPort(portId);
+    }
 }

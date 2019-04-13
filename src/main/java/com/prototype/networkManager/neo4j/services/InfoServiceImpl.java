@@ -1,15 +1,13 @@
 package com.prototype.networkManager.neo4j.services;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.prototype.networkManager.neo4j.domain.DeviceType;
+import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Transactional

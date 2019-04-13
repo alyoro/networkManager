@@ -1,6 +1,7 @@
 package com.prototype.networkManager.neo4j.repository;
 
 import com.prototype.networkManager.neo4j.domain.Connection;
+import com.prototype.networkManager.neo4j.domain.Port;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -18,4 +19,7 @@ public interface ConnectionRepository extends PagingAndSortingRepository<Connect
             "SET pS.portOnTheUpperElement = toString(pM.portNumber) " +
             "RETURN c")
     Iterable<Map<String, Object>> saveConnection(Long portIdMaster, Long portIdSlave, List<String> vlans);
+
+    @Query("MATCH(startPort:Port)-[c:CONNECTION]->(endPort:Port) WHERE ID(c)={0} RETURN startPort AS portSlave, endPort AS portMaster")
+    List<Map<String, Port>> getStartAndEndNode(Long id);
 }

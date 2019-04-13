@@ -2,10 +2,7 @@ package com.prototype.networkManager.controllers;
 
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
-import com.prototype.networkManager.neo4j.exceptions.DeviceNotFoundException;
-import com.prototype.networkManager.neo4j.exceptions.MaximumPortNumberReachedException;
-import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
-import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
+import com.prototype.networkManager.neo4j.exceptions.*;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +47,28 @@ public interface PortController {
         }catch(DeviceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }catch(MaximumPortNumberReachedException | PortNumberAlreadyInListException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @PutMapping(path = "/ports/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
+    default Port updatePort(@PathVariable Long id, @RequestBody Port port){
+        try {
+            return getPortService().updatePort(id, port);
+        } catch (PortNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PatchMapping(path = "/portss/{id:\\d+}")
+    @ResponseStatus(HttpStatus.OK)
+    default Port changeStatusPort(@PathVariable Long id){
+        try{
+            return getPortService().changeStatusPort(id);
+        } catch(PortNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (CantChangePortStatusException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

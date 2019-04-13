@@ -89,4 +89,18 @@ public class SwitchController implements PortController{
     public Port createPort(@PathVariable Long id, @RequestBody Port port) {
         return PortController.super.createPort(id, port);
     }
+
+    @Override
+    @PutMapping("/api/switches/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port updatePort(Long portId, @RequestBody Port port) {
+        return PortController.super.updatePort(portId, port);
+    }
+
+    @Override
+    @PatchMapping("/api/switches/{id}/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port changeStatusPort(Long portId) {
+        return PortController.super.changeStatusPort(portId);
+    }
 }
