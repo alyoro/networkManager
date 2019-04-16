@@ -1,13 +1,16 @@
 package com.prototype.networkManager.neo4j.services;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.prototype.networkManager.neo4j.domain.DeviceNode;
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
+import com.prototype.networkManager.neo4j.exceptions.DeviceNotFoundException;
 import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,6 +32,26 @@ public class InfoServiceImpl implements InfoService {
                     deviceNodeRepository.getNumberOfDevicesByType(deviceType.toString())));
         }
         return countDevicesByType;
+    }
+
+    @Override
+    public Iterable<DeviceNode> devicesLevelUp(Long id) throws DeviceNotFoundException{
+        Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.findById(id);
+        if(deviceNodeOptional.isEmpty()){
+            throw new DeviceNotFoundException("Device with id: "+id+" not found");
+        } else {
+            return deviceNodeRepository.getDevicesLevelUp(id);
+        }
+    }
+
+    @Override
+    public Iterable<DeviceNode> devicesLevelDown(Long id) throws DeviceNotFoundException{
+        Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.findById(id);
+        if(deviceNodeOptional.isEmpty()){
+            throw new DeviceNotFoundException("Device with id: "+id+" not found");
+        } else {
+            return deviceNodeRepository.getDevicesLevelDown(id);
+        }
     }
 
     @JsonSerialize

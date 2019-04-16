@@ -22,4 +22,11 @@ public interface DeviceNodeRepository extends PagingAndSortingRepository<DeviceN
     @Query("MATCH(devices) WHERE {0} IN labels(devices) RETURN count(devices) AS count")
     Integer getNumberOfDevicesByType(String deviceType);
 
+    @Query("MATCH (devices)<-[:IS_PORT]-(:Port)<-[:CONNECTION]-(:Port)-[:IS_PORT]->(device) WHERE ID(device)={0} RETURN devices")
+    Iterable<DeviceNode> getDevicesLevelUp(Long deviceId);
+
+    @Query("MATCH (devices)<-[:IS_PORT]-(:Port)-[:CONNECTION]->(:Port)-[:IS_PORT]->(device) WHERE ID(device)={0} RETURN devices")
+    Iterable<DeviceNode> getDevicesLevelDown(Long deviceId);
+
+
 }
