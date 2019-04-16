@@ -40,7 +40,9 @@ public class InfoServiceImpl implements InfoService {
         if(deviceNodeOptional.isEmpty()){
             throw new DeviceNotFoundException("Device with id: "+id+" not found");
         } else {
-            return deviceNodeRepository.getDevicesLevelUp(id);
+            Iterable<DeviceNode> devices = deviceNodeRepository.getDevicesLevelUp(id);
+            devices.forEach(device -> device.setDeviceType(DeviceType.valueOf(device.getClass().getSimpleName())));
+            return  devices;
         }
     }
 
@@ -50,7 +52,9 @@ public class InfoServiceImpl implements InfoService {
         if(deviceNodeOptional.isEmpty()){
             throw new DeviceNotFoundException("Device with id: "+id+" not found");
         } else {
-            return deviceNodeRepository.getDevicesLevelDown(id);
+            Iterable<DeviceNode> devices = deviceNodeRepository.getDevicesLevelDown(id);
+            devices.forEach(device -> device.setDeviceType(DeviceType.valueOf(device.getClass().getSimpleName())));
+            return  devices;
         }
     }
 
