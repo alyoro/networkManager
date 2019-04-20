@@ -1,6 +1,5 @@
 package com.prototype.networkManager.neo4j.domain;
 
-
 import org.neo4j.ogm.annotation.RelationshipEntity;
 
 import java.util.List;

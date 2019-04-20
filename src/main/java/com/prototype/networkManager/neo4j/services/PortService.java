@@ -1,10 +1,7 @@
 package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Port;
-import com.prototype.networkManager.neo4j.exceptions.DeviceNotFoundException;
-import com.prototype.networkManager.neo4j.exceptions.MaximumPortNumberReachedException;
-import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
-import com.prototype.networkManager.neo4j.exceptions.PortNumberAlreadyInListException;
+import com.prototype.networkManager.neo4j.exceptions.*;
 
 public interface PortService {
 
@@ -13,4 +10,6 @@ public interface PortService {
     Iterable<Port> getPorts(Long id);
     void deletePort(Long id) throws PortNotFoundException;
     Port createPort(Long deviceID, Port port) throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException;
+    Port updatePort(Long id, Port port) throws PortNotFoundException;
+    Port changeStatusPort(Long id) throws PortNotFoundException, CantChangePortStatusException;
 }

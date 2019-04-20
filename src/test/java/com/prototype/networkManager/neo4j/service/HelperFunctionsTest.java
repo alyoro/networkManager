@@ -1,6 +1,6 @@
 package com.prototype.networkManager.neo4j.service;
 
-import com.prototype.networkManager.neo4j.domain.DeviceType;
+import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.services.HelperFunctions;
 import com.prototype.networkManager.neo4j.services.HelperFunctionsImpl;

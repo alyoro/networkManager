@@ -2,6 +2,8 @@ package com.prototype.networkManager.controllers;
 
 import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,12 +28,13 @@ public class ConnectionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/connections")
-    public Connection addConnection(@RequestBody List<Port> ports){
-        try{
+    public Connection addConnection(@RequestBody List<Port> ports) {
+        try {
             return connectionService.addConnection(ports);
-        }catch(Exception e){
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage());
+        } catch (PortNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (ConnectionCantCreatedException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
