@@ -1,15 +1,10 @@
 package com.prototype.networkManager.controllers;
 
-
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.services.PortService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class PortControllerImpl implements PortController {
@@ -37,5 +32,19 @@ public class PortControllerImpl implements PortController {
     public None deletePort(@PathVariable Long id) {
         PortController.super.deletePort(id);
         return new None();
+    }
+
+    @Override
+    @PutMapping("/api/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port updatePort(@PathVariable Long portId, @RequestBody Port port) {
+        return PortController.super.updatePort(portId, port);
+    }
+
+    @Override
+    @PatchMapping("/api/ports/{portId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Port changeStatusPort(@PathVariable Long portId) {
+        return PortController.super.changeStatusPort(portId);
     }
 }

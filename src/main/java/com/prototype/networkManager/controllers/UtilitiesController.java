@@ -7,6 +7,7 @@ import com.prototype.networkManager.neo4j.services.InfoServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,11 +23,13 @@ public class UtilitiesController {
     }
 
     @GetMapping("/api/countingdevices")
+    @ResponseStatus(HttpStatus.OK)
     List<InfoServiceImpl.DeviceCount> getCountingDevices(){
         return infoService.countingDevices();
     }
 
     @GetMapping("/api/deviceslevelup/{deviceId}")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<DeviceNode> getDevicesLevelUp(@PathVariable Long deviceId){
         try{
             return infoService.devicesLevelUp(deviceId);
@@ -36,6 +39,7 @@ public class UtilitiesController {
     }
 
     @GetMapping("/api/devicesleveldown/{deviceId}")
+    @ResponseStatus(HttpStatus.OK)
     Iterable<DeviceNode> getDevicesLevelDown(@PathVariable Long deviceId){
         try{
             return infoService.devicesLevelDown(deviceId);
