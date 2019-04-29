@@ -49,7 +49,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(portMaster.isPresent() && portSlave.isPresent()){
             if(portMaster.get().getConnections()== null && portSlave.get().getConnections() == null){
                 Connection newConnection = new Connection();
-                portSlave.get().setPortOnTheUpperElement(Integer.toString(portMaster.get().getPortNumber()));
+                portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
                 portSlave.get().setDevicePlugged(DeviceType.valueOf(deviceNodeRepository.getDeviceNodeTypeByIdOfPort(
                         portMaster.get().getId()).get(0).get("DeviceType").toString()));
                 newConnection.setStartNode(portSlave.get());

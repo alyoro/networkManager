@@ -4,6 +4,7 @@ import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class PatchPanelController implements PortController{
     void deletePatchPanel(@PathVariable Long id){
         try{
             patchPanelService.deletePatchPanel(id);
-        }catch(PatchPanelNotFoundException e){
+        }catch(PatchPanelNotFoundException | PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

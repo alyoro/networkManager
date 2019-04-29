@@ -4,6 +4,7 @@ import com.prototype.networkManager.neo4j.domain.AccessPoint;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.AccessPointNotFoundException;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.AccessPointService;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class AccessPointController implements PortController {
     void deleteAccessPoint(@PathVariable Long id){
         try{
             accessPointService.deleteAccessServer(id);
-        }catch(AccessPointNotFoundException e){
+        }catch(AccessPointNotFoundException | PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

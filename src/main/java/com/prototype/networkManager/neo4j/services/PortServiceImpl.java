@@ -3,6 +3,7 @@ package com.prototype.networkManager.neo4j.services;
 import com.prototype.networkManager.neo4j.domain.DeviceNode;
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.domain.enums.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import com.prototype.networkManager.neo4j.exceptions.*;
 import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -79,7 +82,7 @@ public class PortServiceImpl implements PortService {
         else {
             List<Port> ports = node.get().getPorts();
             port.setDevicePlugged(DeviceType.None);
-            port.setPortOnTheUpperElement("None");
+            port.setPortOnTheOtherElement("None");
             if(ports != null){
                 if(node.get().getNumberOfPorts() == ports.size()){
                     throw new MaximumPortNumberReachedException("Cant put more ports in this device");
@@ -104,13 +107,29 @@ public class PortServiceImpl implements PortService {
     }
 
     @Override
+    public List<Port> createMultiplePorts(Integer numberOfPorts) {
+        ArrayList<Port> ports= new ArrayList<>();
+        for(int i=0; i<numberOfPorts; i++){
+            ports.add(new Port(
+                    i+1,
+                    DeviceType.None,
+                    "None",
+                    PortSpeed.Ethernet1Gb,
+                    PortStatus.DOWN
+                    ));
+        }
+        return StreamSupport.stream(portRepository.saveAll(ports).spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Port updatePort(Long id, Port port) throws PortNotFoundException {
         Optional<Port> portOptional = portRepository.findById(id);
         if(portOptional.isEmpty()){
             throw new PortNotFoundException("Port with id: "+id+" not found.");
         } else{
             if(portOptional.get().getConnections() == null){
-                portOptional.get().setPortOnTheUpperElement("None");
+                portOptional.get().setPortOnTheOtherElement("None");
                 portOptional.get().setDevicePlugged(DeviceType.None);
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
@@ -127,7 +146,7 @@ public class PortServiceImpl implements PortService {
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
                 if(port.getId() == portMaster.getId()){
-                    portSlave.setPortOnTheUpperElement(String.valueOf(port.getPortNumber()));
+                    portSlave.setPortOnTheOtherElement(String.valueOf(port.getPortNumber()));
                     portSlave = portRepository.save(portSlave);
 
                     System.out.println(portSlave.toString());
@@ -145,7 +164,7 @@ public class PortServiceImpl implements PortService {
         } else{
             if(portOptional.get().getConnections() == null){
                 portOptional.get().setDevicePlugged(DeviceType.None);
-                portOptional.get().setPortOnTheUpperElement("None");
+                portOptional.get().setPortOnTheOtherElement("None");
                 portOptional.get().setPortStatus(changePortStatus(portOptional.get().getPortStatus()));
 
                 return portRepository.save(portOptional.get());

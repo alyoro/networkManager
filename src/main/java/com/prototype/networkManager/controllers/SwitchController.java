@@ -3,6 +3,7 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Switch;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.SwitchNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.SwitchService;
@@ -43,7 +44,7 @@ public class SwitchController implements PortController{
     void deleteSwitch(@PathVariable Long id){
         try{
             switchService.deleteSwitch(id);
-        }catch(SwitchNotFoundException e){
+        }catch(SwitchNotFoundException | PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

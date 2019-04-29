@@ -2,8 +2,8 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Server;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.ServerNotFoundException;
-import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.ServerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,11 @@ public class ServerServiceImpl implements ServerService {
 
     private final ServerRepository serverRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public ServerServiceImpl(ServerRepository serverRepository, PortRepository portRepository) {
+    public ServerServiceImpl(ServerRepository serverRepository, PortService portService) {
         this.serverRepository = serverRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class ServerServiceImpl implements ServerService {
     }
 
     @Override
-    public void deleteServer(Long id) throws ServerNotFoundException {
+    public void deleteServer(Long id) throws ServerNotFoundException, PortNotFoundException {
         Optional<Server> serverOptional = serverRepository.findById(id);
         if(serverOptional.isPresent()) {
             if (!serverOptional.get().getPorts().isEmpty()) {
                 for (Port port : serverOptional.get().getPorts()) {
-                    portRepository.delete(port);
+                    portService.deletePort(port.getId());
                 }
             }
             serverRepository.deleteById(id);
@@ -55,6 +55,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server createServer(Server server) {
+        server.setPorts(portService.createMultiplePorts(server.getNumberOfPorts()));
         return serverRepository.save(server);
     }
 }

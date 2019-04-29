@@ -2,6 +2,7 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Switch;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.SwitchNotFoundException;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.SwitchRepository;
@@ -16,11 +17,11 @@ public class SwitchServiceImpl implements SwitchService {
 
     private final SwitchRepository switchRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public SwitchServiceImpl(SwitchRepository switchRepository, PortRepository portRepository) {
+    public SwitchServiceImpl(SwitchRepository switchRepository, PortService portService) {
         this.switchRepository = switchRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -39,12 +40,12 @@ public class SwitchServiceImpl implements SwitchService {
     }
 
     @Override
-    public void deleteSwitch(Long id) throws SwitchNotFoundException {
+    public void deleteSwitch(Long id) throws SwitchNotFoundException, PortNotFoundException {
         Optional<Switch> switchOptional = switchRepository.findById(id);
         if(switchOptional.isPresent()){
             if(!switchOptional.get().getPorts().isEmpty()){
                 for(Port port: switchOptional.get().getPorts()){
-                    portRepository.delete(port);
+                    portService.deletePort(port.getId());
                 }
             }
             switchRepository.deleteById(id);
@@ -55,6 +56,7 @@ public class SwitchServiceImpl implements SwitchService {
 
     @Override
     public Switch createSwitch(Switch switchDevice) {
+        switchDevice.setPorts(portService.createMultiplePorts(switchDevice.getNumberOfPorts()));
         return switchRepository.save(switchDevice);
     }
 }

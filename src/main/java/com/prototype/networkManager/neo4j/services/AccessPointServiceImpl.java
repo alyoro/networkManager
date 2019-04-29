@@ -3,8 +3,8 @@ package com.prototype.networkManager.neo4j.services;
 import com.prototype.networkManager.neo4j.domain.AccessPoint;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.AccessPointNotFoundException;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.repository.AccessPointRepository;
-import com.prototype.networkManager.neo4j.repository.PortRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +16,11 @@ public class AccessPointServiceImpl implements AccessPointService {
 
     private final AccessPointRepository accessPointRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public AccessPointServiceImpl(AccessPointRepository accessPointRepository, PortRepository portRepository) {
+    public AccessPointServiceImpl(AccessPointRepository accessPointRepository, PortService portService) {
         this.accessPointRepository = accessPointRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class AccessPointServiceImpl implements AccessPointService {
     }
 
     @Override
-    public void deleteAccessServer(Long id) throws AccessPointNotFoundException {
+    public void deleteAccessServer(Long id) throws AccessPointNotFoundException, PortNotFoundException {
         Optional<AccessPoint> accessPointOptional = accessPointRepository.findById(id);
         if(accessPointOptional.isPresent()){
             if(!accessPointOptional.get().getPorts().isEmpty()){
                 for(Port port: accessPointOptional.get().getPorts()){
-                    portRepository.delete(port);
+                    portService.deletePort(port.getId());
                 }
             }
             accessPointRepository.deleteById(id);
@@ -55,6 +55,7 @@ public class AccessPointServiceImpl implements AccessPointService {
 
     @Override
     public AccessPoint createAccessPoint(AccessPoint accessPoint) {
+        accessPoint.setPorts(portService.createMultiplePorts(accessPoint.getNumberOfPorts()));
         return accessPointRepository.save(accessPoint);
     }
 }

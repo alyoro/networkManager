@@ -2,21 +2,25 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Printer;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PrinterNotFoundException;
-import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.PrinterRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
+@Transactional
 public class PrinterServiceImpl implements PrinterService {
 
     private final PrinterRepository printerRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public PrinterServiceImpl(PrinterRepository printerRepository, PortRepository portRepository) {
+    public PrinterServiceImpl(PrinterRepository printerRepository, PortService portService) {
         this.printerRepository = printerRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -35,12 +39,12 @@ public class PrinterServiceImpl implements PrinterService {
     }
 
     @Override
-    public void deletePrinter(Long id) throws PrinterNotFoundException {
+    public void deletePrinter(Long id) throws PrinterNotFoundException, PortNotFoundException {
         Optional<Printer> printerOptional = printerRepository.findById(id);
         if(printerOptional.isPresent()){
             if(!printerOptional.get().getPorts().isEmpty()) {
                 for(Port port: printerOptional.get().getPorts()) {
-                    portRepository.delete(port);
+                    portService.deletePort(port.getId());
                 }
             }
             printerRepository.deleteById(id);
@@ -51,6 +55,7 @@ public class PrinterServiceImpl implements PrinterService {
 
     @Override
     public Printer createPrinter(Printer printer) {
+        printer.setPorts(portService.createMultiplePorts(printer.getNumberOfPorts()));
         return printerRepository.save(printer);
     }
 }

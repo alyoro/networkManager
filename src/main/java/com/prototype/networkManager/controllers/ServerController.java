@@ -3,6 +3,7 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Server;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.ServerNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.ServerService;
@@ -49,7 +50,7 @@ public class ServerController implements PortController{
     void deleteServer(@PathVariable Long id){
         try{
             serverService.deleteServer(id);
-        }catch(ServerNotFoundException e){
+        }catch(ServerNotFoundException | PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

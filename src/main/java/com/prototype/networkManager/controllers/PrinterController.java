@@ -3,6 +3,7 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.Printer;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PrinterNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.PrinterService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+@RestController
 public class PrinterController implements PortController {
 
     private final PrinterService printerService;
@@ -48,7 +50,7 @@ public class PrinterController implements PortController {
     void deletePrinter(@PathVariable Long id){
         try{
             printerService.deletePrinter(id);
-        }catch(PrinterNotFoundException e){
+        }catch(PrinterNotFoundException | PortNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

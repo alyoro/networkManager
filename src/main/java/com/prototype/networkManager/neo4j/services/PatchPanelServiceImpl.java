@@ -3,8 +3,8 @@ package com.prototype.networkManager.neo4j.services;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.repository.PatchPanelRepository;
-import com.prototype.networkManager.neo4j.repository.PortRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +16,11 @@ public class PatchPanelServiceImpl implements PatchPanelService{
 
     private final PatchPanelRepository patchPanelRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public PatchPanelServiceImpl(PatchPanelRepository patchPanelRepository, PortRepository portRepository) {
+    public PatchPanelServiceImpl(PatchPanelRepository patchPanelRepository, PortService portService) {
         this.patchPanelRepository = patchPanelRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class PatchPanelServiceImpl implements PatchPanelService{
     }
 
     @Override
-    public void deletePatchPanel(Long id) throws PatchPanelNotFoundException {
+    public void deletePatchPanel(Long id) throws PatchPanelNotFoundException, PortNotFoundException {
         Optional<PatchPanel> patchPanelOptional = patchPanelRepository.findById(id);
         if(patchPanelOptional.isPresent()){
             if(!patchPanelOptional.get().getPorts().isEmpty()) {
                 for (Port p : patchPanelOptional.get().getPorts()) {
-                    portRepository.delete(p);
+                    portService.deletePort(p.getId());
                 }
             }
             patchPanelRepository.deleteById(id);
@@ -55,6 +55,7 @@ public class PatchPanelServiceImpl implements PatchPanelService{
 
     @Override
     public PatchPanel createPatchPanel(PatchPanel patchPanel){
+        patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts()));
         return patchPanelRepository.save(patchPanel);
     }
 }
