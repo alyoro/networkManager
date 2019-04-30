@@ -35,27 +35,16 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public Iterable<DeviceNode> devicesLevelUp(Long id) throws DeviceNotFoundException{
-        Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.findById(id);
-        if(deviceNodeOptional.isEmpty()){
-            throw new DeviceNotFoundException("Device with id: "+id+" not found");
-        } else {
-            Iterable<DeviceNode> devices = deviceNodeRepository.getDevicesLevelUp(id);
-            devices.forEach(device -> device.setDeviceType(DeviceType.valueOf(device.getClass().getSimpleName())));
-            return  devices;
-        }
-    }
-
-    @Override
-    public Iterable<DeviceNode> devicesLevelDown(Long id) throws DeviceNotFoundException{
-        Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.findById(id);
-        if(deviceNodeOptional.isEmpty()){
-            throw new DeviceNotFoundException("Device with id: "+id+" not found");
-        } else {
-            Iterable<DeviceNode> devices = deviceNodeRepository.getDevicesLevelDown(id);
-            devices.forEach(device -> device.setDeviceType(DeviceType.valueOf(device.getClass().getSimpleName())));
-            return  devices;
-        }
+    public DeviceNode connectedDeviceByPortId(Long portId) throws DeviceNotFoundException{
+            Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.getDeviceNodeByIdOfPort(portId);
+            if(deviceNodeOptional.isPresent()){
+                deviceNodeOptional = deviceNodeRepository.findById(deviceNodeOptional.get().getId(), 3);
+                deviceNodeOptional.get().setDeviceType(DeviceType.valueOf(deviceNodeOptional.get().getClass().getSimpleName()));
+                return  deviceNodeOptional.get();
+            }
+            else {
+                throw new DeviceNotFoundException("Cant find device with port with id: "+portId);
+            }
     }
 
     @JsonSerialize

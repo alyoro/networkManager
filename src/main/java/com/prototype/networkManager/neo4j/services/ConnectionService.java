@@ -10,5 +10,5 @@ import java.util.List;
 public interface ConnectionService {
 
     Iterable<Connection> getConnections();
-    Connection addConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException;
+    Connection makeConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException;
 }

@@ -8,6 +8,5 @@ import java.util.List;
 public interface InfoService {
 
     List<InfoServiceImpl.DeviceCount> countingDevices();
-    Iterable<DeviceNode> devicesLevelUp(Long id) throws DeviceNotFoundException;
-    Iterable<DeviceNode> devicesLevelDown(Long id) throws DeviceNotFoundException;
+    DeviceNode connectedDeviceByPortId(Long portId) throws DeviceNotFoundException;
 }

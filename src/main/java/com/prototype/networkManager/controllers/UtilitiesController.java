@@ -28,21 +28,11 @@ public class UtilitiesController {
         return infoService.countingDevices();
     }
 
-    @GetMapping("/api/deviceslevelup/{deviceId}")
+    @GetMapping("/api/connecteddevice/{portId}")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<DeviceNode> getDevicesLevelUp(@PathVariable Long deviceId){
+    DeviceNode getDevicesLevelUp(@PathVariable Long portId){
         try{
-            return infoService.devicesLevelUp(deviceId);
-        } catch (DeviceNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @GetMapping("/api/devicesleveldown/{deviceId}")
-    @ResponseStatus(HttpStatus.OK)
-    Iterable<DeviceNode> getDevicesLevelDown(@PathVariable Long deviceId){
-        try{
-            return infoService.devicesLevelDown(deviceId);
+            return infoService.connectedDeviceByPortId(portId);
         } catch (DeviceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

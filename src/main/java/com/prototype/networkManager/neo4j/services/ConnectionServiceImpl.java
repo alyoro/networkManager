@@ -38,10 +38,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public Connection addConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException{
-        List<String> vlans = new ArrayList<>();
-        vlans.add("test"); // TODO making vlans
-        vlans.add("test2");
+    public Connection makeConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException{
 
         Optional<Port> portMaster = portRepository.findById(ports.get(0).getId());
         Optional<Port> portSlave = portRepository.findById(ports.get(1).getId());
@@ -49,12 +46,22 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(portMaster.isPresent() && portSlave.isPresent()){
             if(portMaster.get().getConnections()== null && portSlave.get().getConnections() == null){
                 Connection newConnection = new Connection();
+
                 portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
-                portSlave.get().setDevicePlugged(DeviceType.valueOf(deviceNodeRepository.getDeviceNodeTypeByIdOfPort(
-                        portMaster.get().getId()).get(0).get("DeviceType").toString()));
+                portSlave.get().setDevicePlugged(
+                        DeviceType.valueOf(deviceNodeRepository.
+                                getDeviceNodeTypeByIdOfPort(
+                                        portMaster.get().getId()).get(0).get("DeviceType").toString()));
+                portMaster.get().setPortOnTheOtherElement(Integer.toString(portSlave.get().getPortNumber()));
+                portMaster.get().setDevicePlugged(
+                        DeviceType.valueOf(deviceNodeRepository.
+                                getDeviceNodeTypeByIdOfPort(
+                                        portSlave.get().getId()).get(0).get("DeviceType").toString()));
+
                 newConnection.setStartNode(portSlave.get());
                 newConnection.setEndNode(portMaster.get());
-                newConnection.setVlans(vlans);
+                newConnection.setPortIdStart(portSlave.get().getId());
+                newConnection.setPortIdEnd(portMaster.get().getId());
                 return connectionRepository.save(newConnection);
             } else {
                 throw new ConnectionCantCreatedException("Port/ports already occupied.");

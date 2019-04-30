@@ -7,7 +7,8 @@ import java.util.List;
 @RelationshipEntity(type = "CONNECTION")
 public class Connection extends Edge {
 
-    private List<String> vlans;
+    private Long portIdStart;
+    private Long portIdEnd;
 
     public Connection() {
     }
@@ -18,16 +19,24 @@ public class Connection extends Edge {
         this.setEndNode(pM);
     }
 
-    public Connection(List<String> vlans) {
-        this.vlans = vlans;
+    public Connection(Long portIdStart, Long portIdEnd) {
+        this.portIdStart = portIdStart;
+        this.portIdEnd = portIdEnd;
     }
 
-    public List<String> getVlans() {
-        return vlans;
+    public Long getPortIdStart() {
+        return portIdStart;
     }
 
-    public void setVlans(List<String> vlans) {
-        this.vlans = vlans;
+    public void setPortIdStart(Long portIdStart) {
+        this.portIdStart = portIdStart;
     }
 
+    public Long getPortIdEnd() {
+        return portIdEnd;
+    }
+
+    public void setPortIdEnd(Long portIdEnd) {
+        this.portIdEnd = portIdEnd;
+    }
 }

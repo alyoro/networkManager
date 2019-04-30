@@ -28,9 +28,9 @@ public class ConnectionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/connections")
-    public Connection addConnection(@RequestBody List<Port> ports) {
+    public Connection makeConnection(@RequestBody List<Port> ports) {
         try {
-            return connectionService.addConnection(ports);
+            return connectionService.makeConnection(ports);
         } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ConnectionCantCreatedException e) {
