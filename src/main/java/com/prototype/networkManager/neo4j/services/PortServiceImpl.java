@@ -44,12 +44,12 @@ public class PortServiceImpl implements PortService {
     }
 
     @Override
-    public Port getPort(Long id) throws PortNotFoundException{
+    public Port getPort(Long id) throws PortNotFoundException {
         Optional<Port> port = portRepository.findById(id);
-        if(port.isPresent()){
+        if (port.isPresent()) {
             return port.get();
-        }else{
-            throw new PortNotFoundException("Port with id: "+id+" not found.");
+        } else {
+            throw new PortNotFoundException("Port with id: " + id + " not found.");
         }
     }
 
@@ -64,11 +64,11 @@ public class PortServiceImpl implements PortService {
     }
 
     @Override
-    public void deletePort(Long id) throws PortNotFoundException{
-        if(portRepository.findById(id).isPresent()){
+    public void deletePort(Long id) throws PortNotFoundException {
+        if (portRepository.findById(id).isPresent()) {
             portRepository.deleteById(id);
-        }else{
-            throw new PortNotFoundException("Port with id: "+id+" not found.");
+        } else {
+            throw new PortNotFoundException("Port with id: " + id + " not found.");
         }
     }
 
@@ -76,24 +76,23 @@ public class PortServiceImpl implements PortService {
     public Port createPort(Long id, Port port)
             throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException {
         Optional<DeviceNode> node = deviceNodeRepository.findById(id);
-        if(node.isEmpty()) {
-            throw new DeviceNotFoundException("Device with id: "+id+" not found.");
-        }
-        else {
+        if (node.isEmpty()) {
+            throw new DeviceNotFoundException("Device with id: " + id + " not found.");
+        } else {
             List<Port> ports = node.get().getPorts();
             port.setDevicePlugged(DeviceType.None);
             port.setPortOnTheOtherElement("None");
-            if(ports != null){
-                if(node.get().getNumberOfPorts() == ports.size()){
+            if (ports != null) {
+                if (node.get().getNumberOfPorts() == ports.size()) {
                     throw new MaximumPortNumberReachedException("Cant put more ports in this device");
                 }
-                if(helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())){
+                if (helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())) {
                     ports.add(port);
-                } else{
+                } else {
                     throw new PortNumberAlreadyInListException("Port with this number already added to device");
                 }
-            } else{
-                if(node.get().getNumberOfPorts() > 0) {
+            } else {
+                if (node.get().getNumberOfPorts() > 0) {
                     ports = new ArrayList<>();
                     ports.add(port);
                 } else {
@@ -108,15 +107,15 @@ public class PortServiceImpl implements PortService {
 
     @Override
     public List<Port> createMultiplePorts(Integer numberOfPorts) {
-        ArrayList<Port> ports= new ArrayList<>();
-        for(int i=0; i<numberOfPorts; i++){
+        ArrayList<Port> ports = new ArrayList<>();
+        for (int i = 0; i < numberOfPorts; i++) {
             ports.add(new Port(
-                    i+1,
+                    i + 1,
                     DeviceType.None,
                     "None",
                     PortSpeed.Ethernet1Gb,
                     PortStatus.DOWN
-                    ));
+            ));
         }
         return StreamSupport.stream(portRepository.saveAll(ports).spliterator(), false)
                 .collect(Collectors.toList());
@@ -125,10 +124,10 @@ public class PortServiceImpl implements PortService {
     @Override
     public Port updatePort(Long id, Port port) throws PortNotFoundException {
         Optional<Port> portOptional = portRepository.findById(id);
-        if(portOptional.isEmpty()){
-            throw new PortNotFoundException("Port with id: "+id+" not found.");
-        } else{
-            if(portOptional.get().getConnections() == null){
+        if (portOptional.isEmpty()) {
+            throw new PortNotFoundException("Port with id: " + id + " not found.");
+        } else {
+            if (portOptional.get().getConnections() == null) {
                 portOptional.get().setPortOnTheOtherElement("None");
                 portOptional.get().setDevicePlugged(DeviceType.None);
                 portOptional.get().setPortNumber(port.getPortNumber());
@@ -136,7 +135,7 @@ public class PortServiceImpl implements PortService {
 
                 return portRepository.save(portOptional.get());
             } else {
-                Map<String,Port> portsOfConnection = connectionRepository.getStartAndEndNode(
+                Map<String, Port> portsOfConnection = connectionRepository.getStartAndEndNode(
                         portOptional.get().getConnections().get(0).getId()).get(0);
                 Port portMaster = portsOfConnection.get("portMaster");
                 Port portSlave = portsOfConnection.get("portSlave");
@@ -145,7 +144,7 @@ public class PortServiceImpl implements PortService {
 
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
-                if(port.getId() == portMaster.getId()){
+                if (port.getId() == portMaster.getId()) {
                     portSlave.setPortOnTheOtherElement(String.valueOf(port.getPortNumber()));
                     portSlave = portRepository.save(portSlave);
 
@@ -159,23 +158,24 @@ public class PortServiceImpl implements PortService {
     @Override
     public Port changeStatusPort(Long id) throws PortNotFoundException, CantChangePortStatusException {
         Optional<Port> portOptional = portRepository.findById(id);
-        if(portOptional.isEmpty()){
-            throw new PortNotFoundException("Port with id: "+id+" not found.");
-        } else{
-            if(portOptional.get().getConnections() == null){
-                portOptional.get().setDevicePlugged(DeviceType.None);
-                portOptional.get().setPortOnTheOtherElement("None");
-                portOptional.get().setPortStatus(changePortStatus(portOptional.get().getPortStatus()));
+        if (portOptional.isEmpty()) {
+            throw new PortNotFoundException("Port with id: " + id + " not found.");
+        } else {
+//            //TODO Maybe it will be needed in future
+//            if(portOptional.get().getConnections() == null){
+//                portOptional.get().setDevicePlugged(DeviceType.None);
+//                portOptional.get().setPortOnTheOtherElement("None");
+            portOptional.get().setPortStatus(changePortStatus(portOptional.get().getPortStatus()));
 
-                return portRepository.save(portOptional.get());
-            } else{
-                throw new CantChangePortStatusException("Can't change port status because of active connection in it");
-            }
+            return portRepository.save(portOptional.get());
+//            } else{
+//                throw new CantChangePortStatusException("Can't change port status because of active connection in it");
+//            }
         }
     }
 
-    private PortStatus changePortStatus(PortStatus portStatus){
-        if(portStatus == PortStatus.UP){
+    private PortStatus changePortStatus(PortStatus portStatus) {
+        if (portStatus == PortStatus.UP) {
             return PortStatus.DOWN;
         } else {
             return PortStatus.UP;
