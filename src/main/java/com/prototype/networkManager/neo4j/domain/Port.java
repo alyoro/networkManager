@@ -21,6 +21,17 @@ public class Port extends Node {
     @Relationship(type = "CONNECTION", direction = Relationship.UNDIRECTED)
     private List<Connection> connections;
 
+    public Port() {
+    }
+
+    public Port(int portNumber, DeviceType devicePlugged, String portOnTheOtherElement, PortSpeed portSpeed, PortStatus portStatus) {
+        this.portNumber = portNumber;
+        this.devicePlugged = devicePlugged;
+        this.portOnTheOtherElement = portOnTheOtherElement;
+        this.portSpeed = portSpeed;
+        this.portStatus = portStatus;
+    }
+
     @Override
     public String toString() {
         return "Port{" +
@@ -31,17 +42,6 @@ public class Port extends Node {
                 ", portStatus=" + portStatus +
                 ", connections=" + connections +
                 '}';
-    }
-
-    public Port() {
-    }
-
-    public Port(int portNumber, DeviceType devicePlugged, String portOnTheOtherElement, PortSpeed portSpeed, PortStatus portStatus) {
-        this.portNumber = portNumber;
-        this.devicePlugged = devicePlugged;
-        this.portOnTheOtherElement = portOnTheOtherElement;
-        this.portSpeed = portSpeed;
-        this.portStatus = portStatus;
     }
 
     public int getPortNumber() {

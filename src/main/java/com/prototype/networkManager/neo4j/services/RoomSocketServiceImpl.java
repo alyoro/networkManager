@@ -26,10 +26,10 @@ public class RoomSocketServiceImpl implements RoomSocketService {
     @Override
     public RoomSocket getRoomSocket(Long id) throws RoomSocketNotFoundException {
         Optional<RoomSocket> switchOptional = roomSocketRepository.findById(id);
-        if(switchOptional.isPresent()){
+        if (switchOptional.isPresent()) {
             return switchOptional.get();
-        }else{
-            throw new RoomSocketNotFoundException("RoomSocket with id: "+id+" not found.");
+        } else {
+            throw new RoomSocketNotFoundException("RoomSocket with id: " + id + " not found.");
         }
     }
 
@@ -41,15 +41,15 @@ public class RoomSocketServiceImpl implements RoomSocketService {
     @Override
     public void deleteRoomSocket(Long id) throws RoomSocketNotFoundException {
         Optional<RoomSocket> roomSocketOptional = roomSocketRepository.findById(id);
-        if(roomSocketOptional.isPresent()){
-            if(!roomSocketOptional.get().getPorts().isEmpty()){
-                for(Port port: roomSocketOptional.get().getPorts()){
+        if (roomSocketOptional.isPresent()) {
+            if (!roomSocketOptional.get().getPorts().isEmpty()) {
+                for (Port port : roomSocketOptional.get().getPorts()) {
                     portRepository.delete(port);
                 }
             }
             roomSocketRepository.deleteById(id);
         } else {
-            throw new RoomSocketNotFoundException("RoomSocket with id: "+id+" not found.");
+            throw new RoomSocketNotFoundException("RoomSocket with id: " + id + " not found.");
         }
     }
 

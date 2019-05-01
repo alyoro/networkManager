@@ -26,10 +26,10 @@ public class ServerServiceImpl implements ServerService {
     @Override
     public Server getServer(Long id) throws ServerNotFoundException {
         Optional<Server> serverOptional = serverRepository.findById(id);
-        if(serverOptional.isPresent()){
+        if (serverOptional.isPresent()) {
             return serverOptional.get();
-        } else{
-            throw new ServerNotFoundException("Server with id: "+id+" not found");
+        } else {
+            throw new ServerNotFoundException("Server with id: " + id + " not found");
         }
     }
 
@@ -41,7 +41,7 @@ public class ServerServiceImpl implements ServerService {
     @Override
     public void deleteServer(Long id) throws ServerNotFoundException, PortNotFoundException {
         Optional<Server> serverOptional = serverRepository.findById(id);
-        if(serverOptional.isPresent()) {
+        if (serverOptional.isPresent()) {
             if (!serverOptional.get().getPorts().isEmpty()) {
                 for (Port port : serverOptional.get().getPorts()) {
                     portService.deletePort(port.getId());
@@ -49,7 +49,7 @@ public class ServerServiceImpl implements ServerService {
             }
             serverRepository.deleteById(id);
         } else {
-            throw new ServerNotFoundException("Server with id: "+id+" not found");
+            throw new ServerNotFoundException("Server with id: " + id + " not found");
         }
     }
 

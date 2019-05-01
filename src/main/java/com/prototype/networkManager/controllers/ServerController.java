@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class ServerController implements PortController{
+public class ServerController implements PortController {
 
     private final ServerService serverService;
 
@@ -25,32 +25,32 @@ public class ServerController implements PortController{
 
     @GetMapping("/api/servers")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<Server> getServers(){
+    Iterable<Server> getServers() {
         return serverService.getServers();
     }
 
     @GetMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Server getServer(@PathVariable Long id){
-        try{
+    Server getServer(@PathVariable Long id) {
+        try {
             return serverService.getServer(id);
-        } catch(ServerNotFoundException e){
+        } catch (ServerNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/servers")
     @ResponseStatus(HttpStatus.CREATED)
-    Server createServer(@RequestBody Server server){
+    Server createServer(@RequestBody Server server) {
         return serverService.createServer(server);
     }
 
     @DeleteMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteServer(@PathVariable Long id){
-        try{
+    void deleteServer(@PathVariable Long id) {
+        try {
             serverService.deleteServer(id);
-        }catch(ServerNotFoundException | PortNotFoundException e){
+        } catch (ServerNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

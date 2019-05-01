@@ -7,7 +7,6 @@ import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.RoomSocketService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,32 +23,33 @@ public class RoomSocketController implements PortController {
     }
 
     @GetMapping("/api/roomsockets")
-    Iterable<RoomSocket> getRoomSocket(){
+    Iterable<RoomSocket> getRoomSocket() {
         return roomSocketService.getRoomSockets();
     }
 
     @GetMapping("/api/roomsockets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    RoomSocket getRoomSocket(@PathVariable Long id){
-        try{
+    RoomSocket getRoomSocket(@PathVariable Long id) {
+        try {
             return roomSocketService.getRoomSocket(id);
-        }catch(RoomSocketNotFoundException e){
+        } catch (RoomSocketNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @DeleteMapping("/api/roomsockets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteRoomSocket(@PathVariable Long id){
-        try{
+    void deleteRoomSocket(@PathVariable Long id) {
+        try {
             roomSocketService.deleteRoomSocket(id);
-        }catch(RoomSocketNotFoundException e){
+        } catch (RoomSocketNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/roomsockets")
     @ResponseStatus(HttpStatus.CREATED)
-    RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice){
+    RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice) {
         return roomSocketService.createRoomSocket(switchDevice);
     }
 

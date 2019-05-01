@@ -13,8 +13,8 @@ public class HelperFunctionsImpl implements HelperFunctions {
 
         boolean isUnique = true;
 
-        for(Port port: ports){
-            if(port.getPortNumber() == newPortNumber){
+        for (Port port : ports) {
+            if (port.getPortNumber() == newPortNumber) {
                 isUnique = false;
                 return isUnique;
             }

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class PatchPanelServiceImpl implements PatchPanelService{
+public class PatchPanelServiceImpl implements PatchPanelService {
 
     private final PatchPanelRepository patchPanelRepository;
 
@@ -26,35 +26,35 @@ public class PatchPanelServiceImpl implements PatchPanelService{
     @Override
     public PatchPanel getPatchPanel(Long id) throws PatchPanelNotFoundException {
         Optional<PatchPanel> patchPanel = patchPanelRepository.findById(id);
-        if(patchPanel.isPresent()){
+        if (patchPanel.isPresent()) {
             return patchPanel.get();
-        }else{
-            throw new PatchPanelNotFoundException("PatchPanel with id: "+id+" not found.");
+        } else {
+            throw new PatchPanelNotFoundException("PatchPanel with id: " + id + " not found.");
         }
     }
 
     @Override
-    public Iterable<PatchPanel> getPatchPanels(){
+    public Iterable<PatchPanel> getPatchPanels() {
         return patchPanelRepository.findAll(2);
     }
 
     @Override
     public void deletePatchPanel(Long id) throws PatchPanelNotFoundException, PortNotFoundException {
         Optional<PatchPanel> patchPanelOptional = patchPanelRepository.findById(id);
-        if(patchPanelOptional.isPresent()){
-            if(!patchPanelOptional.get().getPorts().isEmpty()) {
+        if (patchPanelOptional.isPresent()) {
+            if (!patchPanelOptional.get().getPorts().isEmpty()) {
                 for (Port p : patchPanelOptional.get().getPorts()) {
                     portService.deletePort(p.getId());
                 }
             }
             patchPanelRepository.deleteById(id);
-        }else{
-            throw new PatchPanelNotFoundException("PatchPanel with id: "+id+" not found.");
+        } else {
+            throw new PatchPanelNotFoundException("PatchPanel with id: " + id + " not found.");
         }
     }
 
     @Override
-    public PatchPanel createPatchPanel(PatchPanel patchPanel){
+    public PatchPanel createPatchPanel(PatchPanel patchPanel) {
         patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts()));
         return patchPanelRepository.save(patchPanel);
     }

@@ -25,8 +25,8 @@ public class InfoServiceImpl implements InfoService {
     @Override
     public List<DeviceCount> countingDevices() {
         List<DeviceCount> countDevicesByType = new ArrayList<>();
-        for(DeviceType deviceType: DeviceType.values()){
-            if(deviceType.equals(DeviceType.None) || deviceType.equals(DeviceType.RoomSocket)) continue;
+        for (DeviceType deviceType : DeviceType.values()) {
+            if (deviceType.equals(DeviceType.None) || deviceType.equals(DeviceType.RoomSocket)) continue;
             countDevicesByType.add(new DeviceCount(
                     deviceType.toString(),
                     deviceNodeRepository.getNumberOfDevicesByType(deviceType.toString())));
@@ -35,20 +35,19 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public DeviceNode connectedDeviceByPortId(Long portId) throws DeviceNotFoundException{
-            Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.getDeviceNodeByIdOfPort(portId);
-            if(deviceNodeOptional.isPresent()){
-                deviceNodeOptional = deviceNodeRepository.findById(deviceNodeOptional.get().getId(), 3);
-                deviceNodeOptional.get().setDeviceType(DeviceType.valueOf(deviceNodeOptional.get().getClass().getSimpleName()));
-                return  deviceNodeOptional.get();
-            }
-            else {
-                throw new DeviceNotFoundException("Cant find device with port with id: "+portId);
-            }
+    public DeviceNode connectedDeviceByPortId(Long portId) throws DeviceNotFoundException {
+        Optional<DeviceNode> deviceNodeOptional = deviceNodeRepository.getDeviceNodeByIdOfPort(portId);
+        if (deviceNodeOptional.isPresent()) {
+            deviceNodeOptional = deviceNodeRepository.findById(deviceNodeOptional.get().getId(), 3);
+            deviceNodeOptional.get().setDeviceType(DeviceType.valueOf(deviceNodeOptional.get().getClass().getSimpleName()));
+            return deviceNodeOptional.get();
+        } else {
+            throw new DeviceNotFoundException("Cant find device with port with id: " + portId);
+        }
     }
 
     @JsonSerialize
-    public class DeviceCount{
+    public class DeviceCount {
         String type;
         Integer number;
 

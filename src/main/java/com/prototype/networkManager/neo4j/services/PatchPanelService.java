@@ -7,8 +7,11 @@ import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 public interface PatchPanelService {
 
     PatchPanel getPatchPanel(Long id) throws PatchPanelNotFoundException;
+
     Iterable<PatchPanel> getPatchPanels();
+
     void deletePatchPanel(Long id) throws PatchPanelNotFoundException, PortNotFoundException;
+
     PatchPanel createPatchPanel(PatchPanel patchPanel);
 }
 

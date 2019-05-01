@@ -2,8 +2,6 @@ package com.prototype.networkManager.neo4j.domain;
 
 import org.neo4j.ogm.annotation.RelationshipEntity;
 
-import java.util.List;
-
 @RelationshipEntity(type = "CONNECTION")
 public class Connection extends Edge {
 
@@ -13,7 +11,7 @@ public class Connection extends Edge {
     public Connection() {
     }
 
-    public Connection(Port pM, Port pS){
+    public Connection(Port pM, Port pS) {
         super();
         this.setStartNode(pS);
         this.setEndNode(pM);

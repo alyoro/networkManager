@@ -24,16 +24,16 @@ public class UtilitiesController {
 
     @GetMapping("/api/countingdevices")
     @ResponseStatus(HttpStatus.OK)
-    List<InfoServiceImpl.DeviceCount> getCountingDevices(){
+    List<InfoServiceImpl.DeviceCount> getCountingDevices() {
         return infoService.countingDevices();
     }
 
     @GetMapping("/api/connecteddevice/{portId}")
     @ResponseStatus(HttpStatus.OK)
-    DeviceNode getDevicesLevelUp(@PathVariable Long portId){
-        try{
+    DeviceNode getDevicesLevelUp(@PathVariable Long portId) {
+        try {
             return infoService.connectedDeviceByPortId(portId);
-        } catch (DeviceNotFoundException e){
+        } catch (DeviceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

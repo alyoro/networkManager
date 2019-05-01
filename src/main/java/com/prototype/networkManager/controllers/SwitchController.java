@@ -12,39 +12,39 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-public class SwitchController implements PortController{
+public class SwitchController implements PortController {
 
     private final SwitchService switchService;
 
     private final PortService portService;
 
-    public SwitchController(SwitchService switchService, PortService portService){
+    public SwitchController(SwitchService switchService, PortService portService) {
         this.switchService = switchService;
         this.portService = portService;
     }
 
     @GetMapping("/api/switches")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<Switch> getSwitches(){
+    Iterable<Switch> getSwitches() {
         return switchService.getSwitches();
     }
 
     @GetMapping("/api/switches/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Switch getSwitch(@PathVariable Long id){
-        try{
+    Switch getSwitch(@PathVariable Long id) {
+        try {
             return switchService.getSwitch(id);
-        }catch(SwitchNotFoundException e){
+        } catch (SwitchNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @DeleteMapping("/api/switches/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteSwitch(@PathVariable Long id){
-        try{
+    void deleteSwitch(@PathVariable Long id) {
+        try {
             switchService.deleteSwitch(id);
-        }catch(SwitchNotFoundException | PortNotFoundException e){
+        } catch (SwitchNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -52,7 +52,7 @@ public class SwitchController implements PortController{
 
     @PostMapping("/api/switches")
     @ResponseStatus(HttpStatus.CREATED)
-    Switch createSwitch(@RequestBody Switch switchDevice){
+    Switch createSwitch(@RequestBody Switch switchDevice) {
         return switchService.createSwitch(switchDevice);
     }
 

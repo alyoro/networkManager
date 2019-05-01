@@ -26,10 +26,10 @@ public class PrinterServiceImpl implements PrinterService {
     @Override
     public Printer getPrinter(Long id) throws PrinterNotFoundException {
         Optional<Printer> printerOptional = printerRepository.findById(id);
-        if(printerOptional.isPresent()){
+        if (printerOptional.isPresent()) {
             return printerOptional.get();
         } else {
-            throw new PrinterNotFoundException("Printer with id: "+id+" not found.");
+            throw new PrinterNotFoundException("Printer with id: " + id + " not found.");
         }
     }
 
@@ -41,15 +41,15 @@ public class PrinterServiceImpl implements PrinterService {
     @Override
     public void deletePrinter(Long id) throws PrinterNotFoundException, PortNotFoundException {
         Optional<Printer> printerOptional = printerRepository.findById(id);
-        if(printerOptional.isPresent()){
-            if(!printerOptional.get().getPorts().isEmpty()) {
-                for(Port port: printerOptional.get().getPorts()) {
+        if (printerOptional.isPresent()) {
+            if (!printerOptional.get().getPorts().isEmpty()) {
+                for (Port port : printerOptional.get().getPorts()) {
                     portService.deletePort(port.getId());
                 }
             }
             printerRepository.deleteById(id);
         } else {
-            throw new PrinterNotFoundException("Printer with id: "+id+" not found.");
+            throw new PrinterNotFoundException("Printer with id: " + id + " not found.");
         }
     }
 

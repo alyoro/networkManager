@@ -13,45 +13,45 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
-public class PatchPanelController implements PortController{
+public class PatchPanelController implements PortController {
 
     private final PatchPanelService patchPanelService;
 
     private final PortService portService;
 
-    public PatchPanelController(PatchPanelService patchPanelService, PortService portService){
+    public PatchPanelController(PatchPanelService patchPanelService, PortService portService) {
         this.patchPanelService = patchPanelService;
         this.portService = portService;
     }
 
     @GetMapping("/api/patchpanels")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<PatchPanel> getPatchPanels(){
+    Iterable<PatchPanel> getPatchPanels() {
         return patchPanelService.getPatchPanels();
     }
 
     @GetMapping("/api/patchpanels/{id}")
     @ResponseStatus(HttpStatus.OK)
-    PatchPanel getPatchPanel(@PathVariable Long id){
-        try{
+    PatchPanel getPatchPanel(@PathVariable Long id) {
+        try {
             return patchPanelService.getPatchPanel(id);
-        } catch(PatchPanelNotFoundException e){
+        } catch (PatchPanelNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @DeleteMapping("/api/patchpanels/{id}")
-    void deletePatchPanel(@PathVariable Long id){
-        try{
+    void deletePatchPanel(@PathVariable Long id) {
+        try {
             patchPanelService.deletePatchPanel(id);
-        }catch(PatchPanelNotFoundException | PortNotFoundException e){
+        } catch (PatchPanelNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/patchpanels")
     @ResponseStatus(HttpStatus.CREATED)
-    PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel){
+    PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel) {
         return patchPanelService.createPatchPanel(patchPanel);
     }
 

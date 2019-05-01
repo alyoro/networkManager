@@ -14,61 +14,61 @@ public interface PortController {
 
     @GetMapping(path = "{id:\\d+}/ports")
     @ResponseStatus(HttpStatus.OK)
-    default Iterable<Port> getPorts(@PathVariable Long id){
+    default Iterable<Port> getPorts(@PathVariable Long id) {
         return getPortService().getPorts(id);
     }
 
     @GetMapping(path = "/ports/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    default Port getPort(@PathVariable Long id){
-        try{
+    default Port getPort(@PathVariable Long id) {
+        try {
             return getPortService().getPort(id);
-        }catch (PortNotFoundException e){
+        } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @DeleteMapping(path = "/ports/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    default None deletePort(@PathVariable Long id){
-        try{
+    default None deletePort(@PathVariable Long id) {
+        try {
             getPortService().deletePort(id);
             return new None();
-        }catch(PortNotFoundException e){
+        } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping(path = "{id:\\d+}/ports")
     @ResponseStatus(HttpStatus.CREATED)
-    default Port createPort(@PathVariable Long id, @RequestBody Port port){
-        try{
+    default Port createPort(@PathVariable Long id, @RequestBody Port port) {
+        try {
             return getPortService().createPort(id, port);
-        }catch(DeviceNotFoundException e){
+        } catch (DeviceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch(MaximumPortNumberReachedException | PortNumberAlreadyInListException e){
+        } catch (MaximumPortNumberReachedException | PortNumberAlreadyInListException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
     @PutMapping(path = "/ports/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    default Port updatePort(@PathVariable Long id, @RequestBody Port port){
+    default Port updatePort(@PathVariable Long id, @RequestBody Port port) {
         try {
             return getPortService().updatePort(id, port);
-        } catch (PortNotFoundException e){
+        } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PatchMapping(path = "/portss/{id:\\d+}")
     @ResponseStatus(HttpStatus.OK)
-    default Port changeStatusPort(@PathVariable Long id){
-        try{
+    default Port changeStatusPort(@PathVariable Long id) {
+        try {
             return getPortService().changeStatusPort(id);
-        } catch(PortNotFoundException e){
+        } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (CantChangePortStatusException e){
+        } catch (CantChangePortStatusException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }

@@ -25,32 +25,32 @@ public class AccessPointController implements PortController {
 
     @GetMapping("/api/accesspoints")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<AccessPoint> getAccessPoints(){
+    Iterable<AccessPoint> getAccessPoints() {
         return accessPointService.getAccessPoints();
     }
 
     @GetMapping("/api/accesspoints/{id}")
     @ResponseStatus(HttpStatus.OK)
-    AccessPoint getAccesPoint(@PathVariable Long id){
-        try{
+    AccessPoint getAccesPoint(@PathVariable Long id) {
+        try {
             return accessPointService.getAccessPoint(id);
-        } catch(AccessPointNotFoundException e){
+        } catch (AccessPointNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/accesspoints")
     @ResponseStatus(HttpStatus.CREATED)
-    AccessPoint createAccessPoint(@RequestBody AccessPoint patchPanel){
+    AccessPoint createAccessPoint(@RequestBody AccessPoint patchPanel) {
         return accessPointService.createAccessPoint(patchPanel);
     }
 
     @DeleteMapping("/api/accesspoints/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteAccessPoint(@PathVariable Long id){
-        try{
+    void deleteAccessPoint(@PathVariable Long id) {
+        try {
             accessPointService.deleteAccessServer(id);
-        }catch(AccessPointNotFoundException | PortNotFoundException e){
+        } catch (AccessPointNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

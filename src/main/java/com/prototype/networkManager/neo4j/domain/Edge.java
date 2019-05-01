@@ -6,7 +6,8 @@ import org.neo4j.ogm.annotation.*;
 @RelationshipEntity
 public class Edge {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @StartNode

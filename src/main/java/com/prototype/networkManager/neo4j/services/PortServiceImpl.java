@@ -1,15 +1,14 @@
 package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.DeviceNode;
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.enums.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import com.prototype.networkManager.neo4j.exceptions.*;
 import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
 import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

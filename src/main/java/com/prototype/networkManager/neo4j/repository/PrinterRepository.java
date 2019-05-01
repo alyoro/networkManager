@@ -6,6 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(exported = false)
-public interface PrinterRepository extends PagingAndSortingRepository<Printer,Long> {
+public interface PrinterRepository extends PagingAndSortingRepository<Printer, Long> {
     Iterable<Printer> findAll(@Depth int depth);
 }

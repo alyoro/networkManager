@@ -22,7 +22,7 @@ public class ConnectionController {
 
     @GetMapping("/connections")
     @ResponseStatus(HttpStatus.OK)
-    public Iterable<Connection> getConnections(){
+    public Iterable<Connection> getConnections() {
         return connectionService.getConnections();
     }
 

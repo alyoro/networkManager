@@ -7,7 +7,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
 
-public class DeviceNode extends Node{
+public class DeviceNode extends Node {
 
     private int numberOfPorts;
 
@@ -17,7 +17,8 @@ public class DeviceNode extends Node{
     @Relationship(type = "IS_PORT", direction = Relationship.INCOMING)
     private List<Port> ports;
 
-    public  DeviceNode(){}
+    public DeviceNode() {
+    }
 
     public DeviceNode(int numberOfPorts, List<String> labels, DeviceType deviceType, List<Port> ports) {
         this.numberOfPorts = numberOfPorts;
@@ -39,7 +40,6 @@ public class DeviceNode extends Node{
     public void setPorts(List<Port> ports) {
         this.ports = ports;
     }
-
 
     public DeviceType getDeviceType() {
         return deviceType;

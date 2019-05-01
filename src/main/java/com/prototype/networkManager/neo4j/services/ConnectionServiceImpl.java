@@ -1,8 +1,8 @@
 package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Connection;
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
@@ -11,7 +11,6 @@ import com.prototype.networkManager.neo4j.repository.PortRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +37,13 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public Connection makeConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException{
+    public Connection makeConnection(List<Port> ports) throws ConnectionCantCreatedException, PortNotFoundException {
 
         Optional<Port> portMaster = portRepository.findById(ports.get(0).getId());
         Optional<Port> portSlave = portRepository.findById(ports.get(1).getId());
 
-        if(portMaster.isPresent() && portSlave.isPresent()){
-            if(portMaster.get().getConnections()== null && portSlave.get().getConnections() == null){
+        if (portMaster.isPresent() && portSlave.isPresent()) {
+            if (portMaster.get().getConnections() == null && portSlave.get().getConnections() == null) {
                 Connection newConnection = new Connection();
 
                 portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
@@ -67,7 +66,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 throw new ConnectionCantCreatedException("Port/ports already occupied.");
             }
         } else {
-            throw new PortNotFoundException("Port with id: "+ports.get(0).getId()+" or id: "+ports.get(1).getId()+" not found.");
+            throw new PortNotFoundException("Port with id: " + ports.get(0).getId() + " or id: " + ports.get(1).getId() + " not found.");
         }
     }
 

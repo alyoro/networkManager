@@ -26,10 +26,10 @@ public class AccessPointServiceImpl implements AccessPointService {
     @Override
     public AccessPoint getAccessPoint(Long id) throws AccessPointNotFoundException {
         Optional<AccessPoint> accessPointOptional = accessPointRepository.findById(id);
-        if(accessPointOptional.isPresent()){
+        if (accessPointOptional.isPresent()) {
             return accessPointOptional.get();
         } else {
-            throw new AccessPointNotFoundException("AccessPoint with id: "+id+" not found.");
+            throw new AccessPointNotFoundException("AccessPoint with id: " + id + " not found.");
         }
     }
 
@@ -41,15 +41,15 @@ public class AccessPointServiceImpl implements AccessPointService {
     @Override
     public void deleteAccessServer(Long id) throws AccessPointNotFoundException, PortNotFoundException {
         Optional<AccessPoint> accessPointOptional = accessPointRepository.findById(id);
-        if(accessPointOptional.isPresent()){
-            if(!accessPointOptional.get().getPorts().isEmpty()){
-                for(Port port: accessPointOptional.get().getPorts()){
+        if (accessPointOptional.isPresent()) {
+            if (!accessPointOptional.get().getPorts().isEmpty()) {
+                for (Port port : accessPointOptional.get().getPorts()) {
                     portService.deletePort(port.getId());
                 }
             }
             accessPointRepository.deleteById(id);
         } else {
-            throw new AccessPointNotFoundException("AccessPoint wit id: "+id+" not found.");
+            throw new AccessPointNotFoundException("AccessPoint wit id: " + id + " not found.");
         }
     }
 

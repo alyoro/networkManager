@@ -25,32 +25,32 @@ public class PrinterController implements PortController {
 
     @GetMapping("/api/printers")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<Printer> getPrinters(){
+    Iterable<Printer> getPrinters() {
         return printerService.getPrinters();
     }
 
     @GetMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    Printer getPrinter(@PathVariable Long id){
-        try{
+    Printer getPrinter(@PathVariable Long id) {
+        try {
             return printerService.getPrinter(id);
-        } catch (PrinterNotFoundException e){
+        } catch (PrinterNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/printers")
     @ResponseStatus(HttpStatus.CREATED)
-    Printer createPrinter(@RequestBody Printer printer){
+    Printer createPrinter(@RequestBody Printer printer) {
         return printerService.createPrinter(printer);
     }
 
     @DeleteMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deletePrinter(@PathVariable Long id){
-        try{
+    void deletePrinter(@PathVariable Long id) {
+        try {
             printerService.deletePrinter(id);
-        }catch(PrinterNotFoundException | PortNotFoundException e){
+        } catch (PrinterNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

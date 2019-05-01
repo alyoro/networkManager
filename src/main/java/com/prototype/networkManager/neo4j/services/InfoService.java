@@ -8,5 +8,6 @@ import java.util.List;
 public interface InfoService {
 
     List<InfoServiceImpl.DeviceCount> countingDevices();
+
     DeviceNode connectedDeviceByPortId(Long portId) throws DeviceNotFoundException;
 }
