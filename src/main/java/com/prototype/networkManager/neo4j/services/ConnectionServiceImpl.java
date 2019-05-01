@@ -4,6 +4,7 @@ import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
+import com.prototype.networkManager.neo4j.exceptions.ConnectionNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
 import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
@@ -70,4 +71,33 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
     }
 
+    @Override
+    public void deleteConnection(Long connectionId) throws ConnectionNotFoundException, PortNotFoundException {
+        Optional<Connection> connectionOptional = connectionRepository.findById(connectionId);
+
+        if (connectionOptional.isPresent()) {
+            Optional<Port> portStart = portRepository.findById(connectionOptional.get().getPortIdStart());
+            Optional<Port> portEnd = portRepository.findById(connectionOptional.get().getPortIdEnd());
+
+            if (portStart.isPresent()) {
+                portStart.get().setPortOnTheOtherElement("None");
+                portStart.get().setDevicePlugged(DeviceType.None);
+                portRepository.save(portStart.get());
+            } else {
+                throw new PortNotFoundException("Port with id: " + connectionOptional.get().getPortIdStart() + " not found.");
+            }
+
+            if (portEnd.isPresent()) {
+                portEnd.get().setPortOnTheOtherElement("None");
+                portEnd.get().setDevicePlugged(DeviceType.None);
+                portRepository.save(portEnd.get());
+            } else {
+                throw new PortNotFoundException("Port with id: " + connectionOptional.get().getPortIdEnd() + " not found.");
+            }
+
+            connectionRepository.delete(connectionOptional.get());
+        } else {
+            throw new ConnectionNotFoundException("Connection with id: " + connectionId + " not found.");
+        }
+    }
 }

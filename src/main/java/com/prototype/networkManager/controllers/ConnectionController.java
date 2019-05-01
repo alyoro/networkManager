@@ -1,8 +1,10 @@
 package com.prototype.networkManager.controllers;
 
 import com.prototype.networkManager.neo4j.domain.Connection;
+import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
+import com.prototype.networkManager.neo4j.exceptions.ConnectionNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,17 @@ public class ConnectionController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ConnectionCantCreatedException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/connections/{connectionId}")
+    public None deleteConnection(@PathVariable Long connectionId) {
+        try {
+            connectionService.deleteConnection(connectionId);
+            return new None();
+        } catch (ConnectionNotFoundException | PortNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
