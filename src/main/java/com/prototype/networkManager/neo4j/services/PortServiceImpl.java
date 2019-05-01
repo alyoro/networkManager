@@ -64,8 +64,23 @@ public class PortServiceImpl implements PortService {
 
     @Override
     public void deletePort(Long id) throws PortNotFoundException {
-        if (portRepository.findById(id).isPresent()) {
-            portRepository.deleteById(id);
+        Optional<Port> portOptional = portRepository.findById(id);
+        if (portOptional.isPresent()) {
+            if (portOptional.get().getConnections() == null) {
+                portRepository.delete(portOptional.get());
+            } else {
+                Optional<Port> otherPort;
+                if (portOptional.get().getId() == portOptional.get().getConnections().get(0).getPortIdStart()) {
+                    otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdEnd());
+
+                } else {
+                    otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdStart());
+                }
+                otherPort.get().setDevicePlugged(DeviceType.None);
+                otherPort.get().setPortOnTheOtherElement("None");
+                portRepository.save(otherPort.get());
+                portRepository.delete(portOptional.get());
+            }
         } else {
             throw new PortNotFoundException("Port with id: " + id + " not found.");
         }
