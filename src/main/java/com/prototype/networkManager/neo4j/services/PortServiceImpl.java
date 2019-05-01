@@ -175,16 +175,18 @@ public class PortServiceImpl implements PortService {
         if (portOptional.isEmpty()) {
             throw new PortNotFoundException("Port with id: " + id + " not found.");
         } else {
-//            //TODO Maybe it will be needed in future
-//            if(portOptional.get().getConnections() == null){
-//                portOptional.get().setDevicePlugged(DeviceType.None);
-//                portOptional.get().setPortOnTheOtherElement("None");
+            if (portOptional.get().getConnections() != null) {
+                Optional<Port> otherPort = Optional.empty();
+                if (portOptional.get().getId() == portOptional.get().getConnections().get(0).getPortIdStart()) {
+                    otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdEnd());
+                } else {
+                    otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdStart());
+                }
+                otherPort.get().setPortStatus(changePortStatus(portOptional.get().getPortStatus()));
+                portRepository.save(otherPort.get());
+            }
             portOptional.get().setPortStatus(changePortStatus(portOptional.get().getPortStatus()));
-
             return portRepository.save(portOptional.get());
-//            } else{
-//                throw new CantChangePortStatusException("Can't change port status because of active connection in it");
-//            }
         }
     }
 
