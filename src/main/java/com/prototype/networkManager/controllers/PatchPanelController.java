@@ -55,6 +55,17 @@ public class PatchPanelController implements PortController {
         return patchPanelService.createPatchPanel(patchPanel);
     }
 
+    @PutMapping("/api/patchpanels/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    PatchPanel updatePatchPanel(@PathVariable Long id, @RequestBody PatchPanel patchPanel) {
+        try {
+            return patchPanelService.updatePatchPanel(id, patchPanel);
+        } catch (PatchPanelNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+
     //-------------------- PortController --------------------
 
     @Override

@@ -55,6 +55,16 @@ public class AccessPointController implements PortController {
         }
     }
 
+    @PutMapping("/api/accesspoints/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    AccessPoint updateAccessPoint(@PathVariable Long id, @RequestBody AccessPoint patchPanel) {
+        try {
+            return accessPointService.updateAccessPoint(id, patchPanel);
+        } catch (AccessPointNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     //-------------------- PortController --------------------
 
     @Override

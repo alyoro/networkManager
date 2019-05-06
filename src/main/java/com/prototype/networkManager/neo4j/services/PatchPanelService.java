@@ -13,5 +13,7 @@ public interface PatchPanelService {
     void deletePatchPanel(Long id) throws PatchPanelNotFoundException, PortNotFoundException;
 
     PatchPanel createPatchPanel(PatchPanel patchPanel);
+
+    PatchPanel updatePatchPanel(Long id, PatchPanel patchPanel) throws PatchPanelNotFoundException;
 }
 

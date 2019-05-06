@@ -58,4 +58,19 @@ public class SwitchServiceImpl implements SwitchService {
         switchDevice.setPorts(portService.createMultiplePorts(switchDevice.getNumberOfPorts()));
         return switchRepository.save(switchDevice);
     }
+
+    @Override
+    public Switch updateSwitch(Long id, Switch switchDevice) throws SwitchNotFoundException {
+        Optional<Switch> switchOptional = switchRepository.findById(id);
+        if (switchOptional.isPresent()) {
+            switchOptional.get().setIdentifier(switchDevice.getIdentifier());
+            switchOptional.get().setLocalization(switchDevice.getLocalization());
+            switchOptional.get().setDateOfPurchase(switchDevice.getDateOfPurchase());
+            switchOptional.get().setManagementIP(switchDevice.getManagementIP());
+
+            return switchRepository.save(switchOptional.get());
+        } else {
+            throw new SwitchNotFoundException("Switch with id: " + id + " not found.");
+        }
+    }
 }

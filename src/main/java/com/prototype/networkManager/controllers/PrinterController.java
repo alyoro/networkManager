@@ -55,6 +55,16 @@ public class PrinterController implements PortController {
         }
     }
 
+    @PutMapping("/api/printers/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    Printer updatePrinter(@PathVariable Long id, @RequestBody Printer printer) {
+        try {
+            return printerService.updatePrinter(id, printer);
+        } catch (PrinterNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     //-------------------- PortController --------------------
 
     @Override

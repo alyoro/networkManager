@@ -1,22 +1,22 @@
 package com.prototype.networkManager.neo4j.service;
 
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.services.HelperFunctions;
 import com.prototype.networkManager.neo4j.services.HelperFunctionsImpl;
-
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class HelperFunctionsTest {
 
     private final HelperFunctions helperFunctions = new HelperFunctionsImpl();
 
     @Test
-    public void arePortNumberListUniqueTest(){
+    public void arePortNumberListUniqueTest() {
         List<Port> ports = new ArrayList<>();
         ports.add(new Port(1, DeviceType.None, "", null));
         ports.add(new Port(2, DeviceType.None, "", null));

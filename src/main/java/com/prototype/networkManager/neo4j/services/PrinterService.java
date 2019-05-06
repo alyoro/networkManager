@@ -12,4 +12,6 @@ public interface PrinterService {
     void deletePrinter(Long id) throws PrinterNotFoundException, PortNotFoundException;
 
     Printer createPrinter(Printer printer);
+
+    Printer updatePrinter(Long id, Printer printer) throws PrinterNotFoundException;
 }

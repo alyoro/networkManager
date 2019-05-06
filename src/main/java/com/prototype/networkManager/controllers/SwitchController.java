@@ -56,6 +56,17 @@ public class SwitchController implements PortController {
         return switchService.createSwitch(switchDevice);
     }
 
+    @PutMapping("/api/switches/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Switch updateSwitch(@PathVariable Long id, @RequestBody Switch switchDevice) {
+        try {
+            return switchService.updateSwitch(id, switchDevice);
+        } catch (SwitchNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+
     //-------------------- PortController --------------------
 
     @Override

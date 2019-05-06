@@ -55,6 +55,16 @@ public class ServerController implements PortController {
         }
     }
 
+    @PutMapping("/api/servers/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    Server updateServer(@PathVariable Long id, @RequestBody Server server) {
+        try {
+            return serverService.updateServer(id, server);
+        } catch (ServerNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     //-------------------- PortController --------------------
 
     @Override

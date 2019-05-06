@@ -58,4 +58,17 @@ public class PrinterServiceImpl implements PrinterService {
         printer.setPorts(portService.createMultiplePorts(printer.getNumberOfPorts()));
         return printerRepository.save(printer);
     }
+
+    @Override
+    public Printer updatePrinter(Long id, Printer printer) throws PrinterNotFoundException {
+        Optional<Printer> printerOptional = printerRepository.findById(id);
+        if (printerOptional.isPresent()) {
+            printerOptional.get().setLocalization(printer.getLocalization());
+            printerOptional.get().setIp(printer.getIp());
+
+            return printerRepository.save(printerOptional.get());
+        } else {
+            throw new PrinterNotFoundException("Printer with id: " + id + " not found.");
+        }
+    }
 }

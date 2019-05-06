@@ -58,4 +58,18 @@ public class ServerServiceImpl implements ServerService {
         server.setPorts(portService.createMultiplePorts(server.getNumberOfPorts()));
         return serverRepository.save(server);
     }
+
+    @Override
+    public Server updateServer(Long id, Server server) throws ServerNotFoundException {
+        Optional<Server> serverOptional = serverRepository.findById(id);
+        if (serverOptional.isPresent()) {
+            serverOptional.get().setLocalization(server.getLocalization());
+            serverOptional.get().setIp(server.getIp());
+
+            return serverRepository.save(serverOptional.get());
+        } else {
+            throw new ServerNotFoundException("Server with id: " + id + " not found.");
+        }
+
+    }
 }

@@ -42,7 +42,7 @@ public class PatchPanelServiceImpl implements PatchPanelService {
     public void deletePatchPanel(Long id) throws PatchPanelNotFoundException, PortNotFoundException {
         Optional<PatchPanel> patchPanelOptional = patchPanelRepository.findById(id);
         if (patchPanelOptional.isPresent()) {
-            if (!patchPanelOptional.get().getPorts().isEmpty()) {
+            if (!(patchPanelOptional.get().getPorts() == null)) {
                 for (Port p : patchPanelOptional.get().getPorts()) {
                     portService.deletePort(p.getId());
                 }
@@ -57,5 +57,21 @@ public class PatchPanelServiceImpl implements PatchPanelService {
     public PatchPanel createPatchPanel(PatchPanel patchPanel) {
         patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts()));
         return patchPanelRepository.save(patchPanel);
+    }
+
+    @Override
+    public PatchPanel updatePatchPanel(Long id, PatchPanel patchPanel) throws PatchPanelNotFoundException {
+        Optional<PatchPanel> patchPanelOptional = patchPanelRepository.findById(id);
+        if (patchPanelOptional.isPresent()) {
+            patchPanelOptional.get().setBuilding(patchPanel.getBuilding());
+            patchPanelOptional.get().setRoom(patchPanel.getRoom());
+            patchPanelOptional.get().setIdentifier(patchPanel.getIdentifier());
+            patchPanelOptional.get().setLocalization(patchPanel.getLocalization());
+            patchPanelOptional.get().setDescription(patchPanel.getDescription());
+
+            return patchPanelRepository.save(patchPanelOptional.get());
+        } else {
+            throw new PatchPanelNotFoundException("PatchPanel with id: " + id + " not found.");
+        }
     }
 }

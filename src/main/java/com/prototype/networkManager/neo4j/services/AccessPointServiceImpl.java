@@ -58,4 +58,17 @@ public class AccessPointServiceImpl implements AccessPointService {
         accessPoint.setPorts(portService.createMultiplePorts(accessPoint.getNumberOfPorts()));
         return accessPointRepository.save(accessPoint);
     }
+
+    @Override
+    public AccessPoint updateAccessPoint(Long id, AccessPoint accessPoint) throws AccessPointNotFoundException {
+        Optional<AccessPoint> accessPointOptional = accessPointRepository.findById(id);
+        if (accessPointOptional.isPresent()) {
+            accessPointOptional.get().setLocalization(accessPoint.getLocalization());
+            accessPointOptional.get().setIp(accessPoint.getIp());
+
+            return accessPointRepository.save(accessPointOptional.get());
+        } else {
+            throw new AccessPointNotFoundException("AccessPoint with id: " + id + " not found.");
+        }
+    }
 }
