@@ -1,7 +1,7 @@
 package com.prototype.networkManager.neo4j.domain;
 
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
-import com.prototype.networkManager.neo4j.domain.enums.PortSpeed;
+import com.prototype.networkManager.neo4j.domain.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.neo4j.annotation.QueryResult;
@@ -14,7 +14,7 @@ public class Port extends Node {
     private int portNumber;
     private DeviceType devicePlugged;
     private String portOnTheOtherElement;
-    private PortSpeed portSpeed;
+    private String portSpeed;
     private PortStatus portStatus;
 
 
@@ -24,7 +24,7 @@ public class Port extends Node {
     public Port() {
     }
 
-    public Port(int portNumber, DeviceType devicePlugged, String portOnTheOtherElement, PortSpeed portSpeed, PortStatus portStatus) {
+    public Port(int portNumber, DeviceType devicePlugged, String portOnTheOtherElement, String portSpeed, PortStatus portStatus) {
         this.portNumber = portNumber;
         this.devicePlugged = devicePlugged;
         this.portOnTheOtherElement = portOnTheOtherElement;
@@ -68,11 +68,11 @@ public class Port extends Node {
         this.portOnTheOtherElement = portOnTheOtherElement;
     }
 
-    public PortSpeed getPortSpeed() {
+    public String getPortSpeed() {
         return portSpeed;
     }
 
-    public void setPortSpeed(PortSpeed portSpeed) {
+    public void setPortSpeed(String portSpeed) {
         this.portSpeed = portSpeed;
     }
 

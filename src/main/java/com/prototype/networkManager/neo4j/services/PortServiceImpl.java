@@ -3,7 +3,6 @@ package com.prototype.networkManager.neo4j.services;
 import com.prototype.networkManager.neo4j.domain.DeviceNode;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
-import com.prototype.networkManager.neo4j.domain.enums.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import com.prototype.networkManager.neo4j.exceptions.*;
 import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
@@ -127,7 +126,7 @@ public class PortServiceImpl implements PortService {
                     i + 1,
                     DeviceType.None,
                     "None",
-                    PortSpeed.Ethernet1Gb,
+                    "Ethernet1Gb",
                     PortStatus.DOWN
             ));
         }
