@@ -49,14 +49,12 @@ public class ConnectionServiceImpl implements ConnectionService {
 
                 portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
                 portSlave.get().setDevicePlugged(
-                        DeviceType.valueOf(deviceNodeRepository.
-                                getDeviceNodeTypeByIdOfPort(
-                                        portMaster.get().getId()).get(0).get("DeviceType").toString()));
+                        deviceNodeRepository.getDeviceNodeByIdOfPort(
+                                portMaster.get().getId()).get().getIdentifier());
                 portMaster.get().setPortOnTheOtherElement(Integer.toString(portSlave.get().getPortNumber()));
                 portMaster.get().setDevicePlugged(
-                        DeviceType.valueOf(deviceNodeRepository.
-                                getDeviceNodeTypeByIdOfPort(
-                                        portSlave.get().getId()).get(0).get("DeviceType").toString()));
+                        deviceNodeRepository.getDeviceNodeByIdOfPort(
+                                        portSlave.get().getId()).get().getIdentifier());
 
                 newConnection.setStartNode(portSlave.get());
                 newConnection.setEndNode(portMaster.get());
@@ -81,7 +79,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             if (portStart.isPresent()) {
                 portStart.get().setPortOnTheOtherElement("None");
-                portStart.get().setDevicePlugged(DeviceType.None);
+                portStart.get().setDevicePlugged("None");
                 portRepository.save(portStart.get());
             } else {
                 throw new PortNotFoundException("Port with id: " + connectionOptional.get().getPortIdStart() + " not found.");
@@ -89,7 +87,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             if (portEnd.isPresent()) {
                 portEnd.get().setPortOnTheOtherElement("None");
-                portEnd.get().setDevicePlugged(DeviceType.None);
+                portEnd.get().setDevicePlugged("None");
                 portRepository.save(portEnd.get());
             } else {
                 throw new PortNotFoundException("Port with id: " + connectionOptional.get().getPortIdEnd() + " not found.");

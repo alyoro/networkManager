@@ -4,17 +4,15 @@ public class PatchPanel extends DeviceNode {
 
     private String building;
     private String room;
-    private String identifier;
     private String localization;
     private String description;
 
     public PatchPanel() {
     }
 
-    public PatchPanel(String building, String room, String identifier, String localization, String description) {
+    public PatchPanel(String building, String room, String localization, String description) {
         this.building = building;
         this.room = room;
-        this.identifier = identifier;
         this.localization = localization;
         this.description = description;
     }
@@ -33,14 +31,6 @@ public class PatchPanel extends DeviceNode {
 
     public void setRoom(String room) {
         this.room = room;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
     }
 
     public String getLocalization() {

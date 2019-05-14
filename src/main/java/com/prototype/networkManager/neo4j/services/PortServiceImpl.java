@@ -75,7 +75,7 @@ public class PortServiceImpl implements PortService {
                 } else {
                     otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdStart());
                 }
-                otherPort.get().setDevicePlugged(DeviceType.None);
+                otherPort.get().setDevicePlugged("None");
                 otherPort.get().setPortOnTheOtherElement("None");
                 portRepository.save(otherPort.get());
                 portRepository.delete(portOptional.get());
@@ -93,7 +93,7 @@ public class PortServiceImpl implements PortService {
             throw new DeviceNotFoundException("Device with id: " + id + " not found.");
         } else {
             List<Port> ports = node.get().getPorts();
-            port.setDevicePlugged(DeviceType.None);
+            port.setDevicePlugged("None");
             port.setPortOnTheOtherElement("None");
             if (ports != null) {
                 if (node.get().getNumberOfPorts() == ports.size()) {
@@ -124,7 +124,7 @@ public class PortServiceImpl implements PortService {
         for (int i = 0; i < numberOfPorts; i++) {
             ports.add(new Port(
                     i + 1,
-                    DeviceType.None,
+                    "None",
                     "None",
                     "Ethernet1Gb",
                     PortStatus.DOWN
@@ -142,7 +142,7 @@ public class PortServiceImpl implements PortService {
         } else {
             if (portOptional.get().getConnections() == null) {
                 portOptional.get().setPortOnTheOtherElement("None");
-                portOptional.get().setDevicePlugged(DeviceType.None);
+                portOptional.get().setDevicePlugged("None");
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
 

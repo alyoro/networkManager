@@ -12,7 +12,7 @@ import java.util.List;
 public class Port extends Node {
 
     private int portNumber;
-    private DeviceType devicePlugged;
+    private String devicePlugged;
     private String portOnTheOtherElement;
     private String portSpeed;
     private PortStatus portStatus;
@@ -24,7 +24,7 @@ public class Port extends Node {
     public Port() {
     }
 
-    public Port(int portNumber, DeviceType devicePlugged, String portOnTheOtherElement, String portSpeed, PortStatus portStatus) {
+    public Port(int portNumber, String devicePlugged, String portOnTheOtherElement, String portSpeed, PortStatus portStatus) {
         this.portNumber = portNumber;
         this.devicePlugged = devicePlugged;
         this.portOnTheOtherElement = portOnTheOtherElement;
@@ -52,11 +52,11 @@ public class Port extends Node {
         this.portNumber = portNumber;
     }
 
-    public DeviceType getDevicePlugged() {
+    public String getDevicePlugged() {
         return devicePlugged;
     }
 
-    public void setDevicePlugged(DeviceType devicePlugged) {
+    public void setDevicePlugged(String devicePlugged) {
         this.devicePlugged = devicePlugged;
     }
 

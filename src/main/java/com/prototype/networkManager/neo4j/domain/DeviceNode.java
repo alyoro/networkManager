@@ -10,6 +10,7 @@ import java.util.List;
 public class DeviceNode extends Node {
 
     private int numberOfPorts;
+    private String identifier;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private DeviceType deviceType;
@@ -20,17 +21,20 @@ public class DeviceNode extends Node {
     public DeviceNode() {
     }
 
-    public DeviceNode(int numberOfPorts, List<String> labels, DeviceType deviceType, List<Port> ports) {
-        this.numberOfPorts = numberOfPorts;
-        this.ports = ports;
-    }
-
     public int getNumberOfPorts() {
         return numberOfPorts;
     }
 
     public void setNumberOfPorts(int numberOfPorts) {
         this.numberOfPorts = numberOfPorts;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public List<Port> getPorts() {
