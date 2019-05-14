@@ -97,7 +97,7 @@ public class PortServiceImpl implements PortService {
             port.setPortOnTheOtherElement("None");
             if (ports != null) {
                 if (node.get().getNumberOfPorts() == ports.size()) {
-                    throw new MaximumPortNumberReachedException("Cant put more ports in this device");
+                    node.get().setNumberOfPorts(node.get().getNumberOfPorts()+1);
                 }
                 if (helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())) {
                     ports.add(port);
