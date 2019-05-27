@@ -47,9 +47,10 @@ public class AccessPointController implements PortController {
 
     @DeleteMapping("/api/accesspoints/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteAccessPoint(@PathVariable Long id) {
+    None deleteAccessPoint(@PathVariable Long id) {
         try {
             accessPointService.deleteAccessServer(id);
+            return new None();
         } catch (AccessPointNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

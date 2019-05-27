@@ -47,9 +47,10 @@ public class PrinterController implements PortController {
 
     @DeleteMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deletePrinter(@PathVariable Long id) {
+    None deletePrinter(@PathVariable Long id) {
         try {
             printerService.deletePrinter(id);
+            return new None();
         } catch (PrinterNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

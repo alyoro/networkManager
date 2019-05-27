@@ -39,9 +39,10 @@ public class RoomSocketController implements PortController {
 
     @DeleteMapping("/api/roomsockets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteRoomSocket(@PathVariable Long id) {
+    None deleteRoomSocket(@PathVariable Long id) {
         try {
             roomSocketService.deleteRoomSocket(id);
+            return new None();
         } catch (RoomSocketNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

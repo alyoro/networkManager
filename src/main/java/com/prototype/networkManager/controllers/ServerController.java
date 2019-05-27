@@ -47,9 +47,10 @@ public class ServerController implements PortController {
 
     @DeleteMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteServer(@PathVariable Long id) {
+    None deleteServer(@PathVariable Long id) {
         try {
             serverService.deleteServer(id);
+            return new None();
         } catch (ServerNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

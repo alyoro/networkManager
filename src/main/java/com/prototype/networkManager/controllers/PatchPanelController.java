@@ -41,9 +41,10 @@ public class PatchPanelController implements PortController {
     }
 
     @DeleteMapping("/api/patchpanels/{id}")
-    void deletePatchPanel(@PathVariable Long id) {
+    None deletePatchPanel(@PathVariable Long id) {
         try {
             patchPanelService.deletePatchPanel(id);
+            return new None();
         } catch (PatchPanelNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

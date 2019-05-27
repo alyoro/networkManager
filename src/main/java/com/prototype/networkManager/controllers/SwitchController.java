@@ -41,9 +41,10 @@ public class SwitchController implements PortController {
 
     @DeleteMapping("/api/switches/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteSwitch(@PathVariable Long id) {
+    None deleteSwitch(@PathVariable Long id) {
         try {
             switchService.deleteSwitch(id);
+            return new None();
         } catch (SwitchNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
