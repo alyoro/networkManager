@@ -3,6 +3,7 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
+import com.prototype.networkManager.neo4j.domain.enums.ConnectionType;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
@@ -29,10 +30,10 @@ public class ConnectionController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/connections")
-    public Connection makeConnection(@RequestBody List<Port> ports) {
+    @PostMapping("/connections/{connectionType}")
+    public Connection makeConnection(@RequestBody List<Port> ports, @PathVariable ConnectionType connectionType) {
         try {
-            return connectionService.makeConnection(ports);
+            return connectionService.makeConnection(ports, connectionType);
         } catch (PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (ConnectionCantCreatedException e) {

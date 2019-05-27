@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //	implementation 'org.springframework.boot:spring-boot-starter-data-ldap'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
@@ -37,6 +38,6 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'
 	testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.23.4'
-
-
+	compileOnly 'org.projectlombok:lombok:1.18.8'
+	annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }
