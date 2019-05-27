@@ -1,7 +1,5 @@
 package com.prototype.networkManager.neo4j.domain;
 
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
-import com.prototype.networkManager.neo4j.domain.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.neo4j.annotation.QueryResult;

@@ -65,7 +65,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 throw new ConnectionCantCreatedException("Port/ports already occupied.");
             }
         } else {
-            throw new PortNotFoundException("Port with id: " + ports.get(0).getId() + " or id: " + ports.get(1).getId() + " not found.");
+            throw new PortNotFoundException("Port with id: " + ports.get(0).getId() + " or port with id: " + ports.get(1).getId() + " not found.");
         }
     }
 
