@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.domain;
 
+import com.prototype.networkManager.neo4j.domain.enums.ConnectionType;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 
 @RelationshipEntity(type = "CONNECTION")
@@ -7,6 +8,7 @@ public class Connection extends Edge {
 
     private Long portIdStart;
     private Long portIdEnd;
+    private ConnectionType connectionType;
 
     public Connection() {
     }
@@ -17,9 +19,10 @@ public class Connection extends Edge {
         this.setEndNode(pM);
     }
 
-    public Connection(Long portIdStart, Long portIdEnd) {
+    public Connection(Long portIdStart, Long portIdEnd, ConnectionType connectionType) {
         this.portIdStart = portIdStart;
         this.portIdEnd = portIdEnd;
+        this.connectionType = connectionType;
     }
 
     public Long getPortIdStart() {
@@ -36,5 +39,13 @@ public class Connection extends Edge {
 
     public void setPortIdEnd(Long portIdEnd) {
         this.portIdEnd = portIdEnd;
+    }
+
+    public ConnectionType getConnectionType() {
+        return connectionType;
+    }
+
+    public void setConnectionType(ConnectionType connectionType) {
+        this.connectionType = connectionType;
     }
 }

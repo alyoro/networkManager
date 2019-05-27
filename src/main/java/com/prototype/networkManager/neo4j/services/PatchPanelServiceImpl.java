@@ -1,5 +1,6 @@
 package com.prototype.networkManager.neo4j.services;
 
+import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.PatchPanel;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.exceptions.PatchPanelNotFoundException;
@@ -8,6 +9,7 @@ import com.prototype.networkManager.neo4j.repository.PatchPanelRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.Optional;
 
 @Service
@@ -35,7 +37,13 @@ public class PatchPanelServiceImpl implements PatchPanelService {
 
     @Override
     public Iterable<PatchPanel> getPatchPanels() {
-        return patchPanelRepository.findAll(2);
+        Iterable<PatchPanel> patchPanels = patchPanelRepository.findAll(2);
+        patchPanels.forEach(patchPanel -> patchPanel.getPorts().forEach(port -> {
+            if(port.getConnections() != null)
+            port.getConnections().sort(Comparator.comparing(Connection::getConnectionType));
+        }));
+
+        return patchPanels;
     }
 
     @Override
