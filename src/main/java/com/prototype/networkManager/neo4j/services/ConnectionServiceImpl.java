@@ -3,7 +3,6 @@ package com.prototype.networkManager.neo4j.services;
 import com.prototype.networkManager.neo4j.domain.Connection;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.enums.ConnectionType;
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionCantCreatedException;
 import com.prototype.networkManager.neo4j.exceptions.ConnectionNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
@@ -51,21 +50,22 @@ public class ConnectionServiceImpl implements ConnectionService {
                     Connection newConnection = new Connection();
                     newConnection.setConnectionType(connectionType);
 
-                    portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
-                    portSlave.get().setDevicePlugged(
-                            deviceNodeService.getDeviceByPortId(portMaster.get().getId()).getIdentifier());
+                    if (connectionType.equals(ConnectionType.SOCKET)) {
+                        portSlave.get().setPortOnTheOtherElement(Integer.toString(portMaster.get().getPortNumber()));
+                        portSlave.get().setDevicePlugged(
+                                deviceNodeService.getDeviceByPortId(portMaster.get().getId()).getIdentifier());
 
-                    portMaster.get().setPortOnTheOtherElement(Integer.toString(portSlave.get().getPortNumber()));
-                    portMaster.get().setDevicePlugged(
-                            deviceNodeService.getDeviceByPortId(portSlave.get().getId()).getIdentifier());
-
+                        portMaster.get().setPortOnTheOtherElement(Integer.toString(portSlave.get().getPortNumber()));
+                        portMaster.get().setDevicePlugged(
+                                deviceNodeService.getDeviceByPortId(portSlave.get().getId()).getIdentifier());
+                    }
                     newConnection.setStartNode(portSlave.get());
                     newConnection.setEndNode(portMaster.get());
                     newConnection.setPortIdStart(portSlave.get().getId());
                     newConnection.setPortIdEnd(portMaster.get().getId());
                     return connectionRepository.save(newConnection);
-                } catch (Exception e){
-                    throw new ConnectionCantCreatedException("ConnectionService: "+e.getMessage());
+                } catch (Exception e) {
+                    throw new ConnectionCantCreatedException("ConnectionService: " + e.getMessage());
                 }
             } else {
                 throw new ConnectionCantCreatedException("Port/ports already occupied.");

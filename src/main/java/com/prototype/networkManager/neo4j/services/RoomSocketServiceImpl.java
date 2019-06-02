@@ -2,6 +2,7 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.RoomSocket;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.RoomSocketRepository;
@@ -16,11 +17,11 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
     private final RoomSocketRepository roomSocketRepository;
 
-    private final PortRepository portRepository;
+    private final PortService portService;
 
-    public RoomSocketServiceImpl(RoomSocketRepository roomSocketRepository, PortRepository portRepository) {
+    public RoomSocketServiceImpl(RoomSocketRepository roomSocketRepository, PortService portService) {
         this.roomSocketRepository = roomSocketRepository;
-        this.portRepository = portRepository;
+        this.portService = portService;
     }
 
     @Override
@@ -39,12 +40,12 @@ public class RoomSocketServiceImpl implements RoomSocketService {
     }
 
     @Override
-    public void deleteRoomSocket(Long id) throws RoomSocketNotFoundException {
+    public void deleteRoomSocket(Long id) throws RoomSocketNotFoundException, PortNotFoundException {
         Optional<RoomSocket> roomSocketOptional = roomSocketRepository.findById(id);
         if (roomSocketOptional.isPresent()) {
-            if (!roomSocketOptional.get().getPorts().isEmpty()) {
+            if (!(roomSocketOptional.get().getPorts() == null)) {
                 for (Port port : roomSocketOptional.get().getPorts()) {
-                    portRepository.delete(port);
+                    portService.deletePort(port.getId());
                 }
             }
             roomSocketRepository.deleteById(id);
@@ -55,6 +56,22 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
     @Override
     public RoomSocket createRoomSocket(RoomSocket roomSocket) {
+        roomSocket.setPorts(portService.createMultiplePorts(roomSocket.getNumberOfPorts()));
         return roomSocketRepository.save(roomSocket);
+    }
+
+    @Override
+    public RoomSocket updateRoomSocket(Long id, RoomSocket roomSocket) throws RoomSocketNotFoundException {
+        Optional<RoomSocket> roomSocketOptional = roomSocketRepository.findById(id);
+        if(roomSocketOptional.isPresent()){
+            roomSocketOptional.get().setBuilding(roomSocket.getBuilding());
+            roomSocketOptional.get().setRoom(roomSocket.getRoom());
+            roomSocketOptional.get().setIdentifier(roomSocket.getIdentifier());
+            roomSocketOptional.get().setDescription(roomSocket.getDescription());
+
+            return roomSocketRepository.save(roomSocketOptional.get());
+        } else {
+            throw new RoomSocketNotFoundException("RoomSocekt with id: "+id+" not found");
+        }
     }
 }

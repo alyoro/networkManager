@@ -3,6 +3,7 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.RoomSocket;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.RoomSocketService;
@@ -43,15 +44,27 @@ public class RoomSocketController implements PortController {
         try {
             roomSocketService.deleteRoomSocket(id);
             return new None();
-        } catch (RoomSocketNotFoundException e) {
+        } catch (RoomSocketNotFoundException | PortNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping("/api/roomsockets")
     @ResponseStatus(HttpStatus.CREATED)
-    RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice) {
-        return roomSocketService.createRoomSocket(switchDevice);
+    RoomSocket createRoomSocket(@RequestBody RoomSocket roomSocket) {
+        return roomSocketService.createRoomSocket(roomSocket);
+    }
+
+
+    @PutMapping("/api/roomsockets/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    RoomSocket updatePatchPanel(@PathVariable Long id, @RequestBody RoomSocket roomSocket) {
+        try {
+            return roomSocketService.updateRoomSocket(id, roomSocket);
+        } catch (RoomSocketNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
     }
 
     //-------------------- PortController --------------------
