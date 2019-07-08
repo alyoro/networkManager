@@ -55,7 +55,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public Server createServer(Server server) {
-        server.setPorts(portService.createMultiplePorts(server.getNumberOfPorts()));
+        server.setPorts(portService.createMultiplePorts(server.getNumberOfPorts(), true));
         return serverRepository.save(server);
     }
 

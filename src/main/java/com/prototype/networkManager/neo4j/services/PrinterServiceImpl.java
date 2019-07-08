@@ -55,7 +55,7 @@ public class PrinterServiceImpl implements PrinterService {
 
     @Override
     public Printer createPrinter(Printer printer) {
-        printer.setPorts(portService.createMultiplePorts(printer.getNumberOfPorts()));
+        printer.setPorts(portService.createMultiplePorts(printer.getNumberOfPorts(), false));
         return printerRepository.save(printer);
     }
 

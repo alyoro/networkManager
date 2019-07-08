@@ -9,8 +9,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class PortSpeed extends Node{
-
-    private List<String> names;
-
+public class Vlans extends Node{
+    List<String> names;
 }

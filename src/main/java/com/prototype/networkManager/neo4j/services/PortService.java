@@ -17,7 +17,7 @@ public interface PortService {
 
     Port createPort(Long deviceID, Port port) throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException;
 
-    List<Port> createMultiplePorts(Integer numberOfPorts);
+    List<Port> createMultiplePorts(Integer numberOfPorts, boolean logical);
 
     Port updatePort(Long id, Port port) throws PortNotFoundException;
 

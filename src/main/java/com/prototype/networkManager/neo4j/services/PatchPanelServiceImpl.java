@@ -63,7 +63,7 @@ public class PatchPanelServiceImpl implements PatchPanelService {
 
     @Override
     public PatchPanel createPatchPanel(PatchPanel patchPanel) {
-        patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts()));
+        patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts(),false));
         return patchPanelRepository.save(patchPanel);
     }
 

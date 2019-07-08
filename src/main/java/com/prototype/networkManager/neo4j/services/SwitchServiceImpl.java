@@ -55,7 +55,7 @@ public class SwitchServiceImpl implements SwitchService {
 
     @Override
     public Switch createSwitch(Switch switchDevice) {
-        switchDevice.setPorts(portService.createMultiplePorts(switchDevice.getNumberOfPorts()));
+        switchDevice.setPorts(portService.createMultiplePorts(switchDevice.getNumberOfPorts(), true));
         return switchRepository.save(switchDevice);
     }
 

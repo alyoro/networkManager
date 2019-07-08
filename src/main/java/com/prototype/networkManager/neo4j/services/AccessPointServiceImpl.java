@@ -55,7 +55,7 @@ public class AccessPointServiceImpl implements AccessPointService {
 
     @Override
     public AccessPoint createAccessPoint(AccessPoint accessPoint) {
-        accessPoint.setPorts(portService.createMultiplePorts(accessPoint.getNumberOfPorts()));
+        accessPoint.setPorts(portService.createMultiplePorts(accessPoint.getNumberOfPorts(), false));
         return accessPointRepository.save(accessPoint);
     }
 

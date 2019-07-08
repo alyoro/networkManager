@@ -4,7 +4,6 @@ import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.RoomSocket;
 import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
-import com.prototype.networkManager.neo4j.repository.PortRepository;
 import com.prototype.networkManager.neo4j.repository.RoomSocketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +55,7 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
     @Override
     public RoomSocket createRoomSocket(RoomSocket roomSocket) {
-        roomSocket.setPorts(portService.createMultiplePorts(roomSocket.getNumberOfPorts()));
+        roomSocket.setPorts(portService.createMultiplePorts(roomSocket.getNumberOfPorts(), false));
         return roomSocketRepository.save(roomSocket);
     }
 
