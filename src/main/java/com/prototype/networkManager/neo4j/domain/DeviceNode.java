@@ -3,6 +3,7 @@ package com.prototype.networkManager.neo4j.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 public class DeviceNode extends Node {
 
     private int numberOfPorts;
+
+    @Index(unique=true)
     private String identifier;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
