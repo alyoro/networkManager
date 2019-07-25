@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -36,6 +37,11 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public Iterable<Connection> getConnections() {
         return connectionRepository.findAll();
+    }
+
+    @Override
+    public Map<String, Port> getStartAndEndNode(Long connectionId) {
+        return connectionRepository.getStartAndEndNode(connectionId).get(0);
     }
 
     @Override

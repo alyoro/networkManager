@@ -19,12 +19,12 @@ public class VlansController {
     }
 
     @GetMapping("/api/vlans")
-    List<String> getPortSpeedNames(){
+    List<String> getVlansNames(){
         return vlansService.getVlansNames();
     }
 
     @PatchMapping("/api/vlans/{name}")
-    List<String> patchPortSpeedNames(@PathVariable String name) {
+    List<String> patchVlansNames(@PathVariable String name) {
         try {
             return vlansService.updateVlansNames(name);
         } catch (VlanNameAlreadyInDatabaseException e){
@@ -33,7 +33,7 @@ public class VlansController {
     }
 
     @DeleteMapping("/api/vlans/{name}")
-    List<String> deletePortSpeedNames(@PathVariable String name) {
+    List<String> deleteVlansNames(@PathVariable String name) {
         try {
             return vlansService.deleteNameFromVlans(name);
         } catch (VlanNameNotFoundException e){

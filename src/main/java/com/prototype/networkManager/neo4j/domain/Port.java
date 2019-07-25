@@ -2,14 +2,12 @@ package com.prototype.networkManager.neo4j.domain;
 
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.neo4j.annotation.QueryResult;
 
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @QueryResult
