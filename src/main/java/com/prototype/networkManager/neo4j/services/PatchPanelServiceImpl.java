@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -39,8 +41,8 @@ public class PatchPanelServiceImpl implements PatchPanelService {
     public Iterable<PatchPanel> getPatchPanels() {
         Iterable<PatchPanel> patchPanels = patchPanelRepository.findAll(2);
         patchPanels.forEach(patchPanel -> patchPanel.getPorts().forEach(port -> {
-            if(port.getConnections() != null)
-            port.getConnections().sort(Comparator.comparing(Connection::getConnectionType));
+            if (port.getConnections() != null)
+                port.getConnections().sort(Comparator.comparing(Connection::getConnectionType));
         }));
 
         return patchPanels;
@@ -63,7 +65,7 @@ public class PatchPanelServiceImpl implements PatchPanelService {
 
     @Override
     public PatchPanel createPatchPanel(PatchPanel patchPanel) {
-        patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts(),false));
+        patchPanel.setPorts(portService.createMultiplePorts(patchPanel.getNumberOfPorts(), false));
         return patchPanelRepository.save(patchPanel);
     }
 
@@ -81,5 +83,26 @@ public class PatchPanelServiceImpl implements PatchPanelService {
         } else {
             throw new PatchPanelNotFoundException("PatchPanel with id: " + id + " not found.");
         }
+    }
+
+    @Override
+    public String createPatchPanelReport(Long id) throws PatchPanelNotFoundException {
+        PatchPanel patchPanel = this.getPatchPanel(id);
+
+        HashMap<String, String> patchPanelProps = new HashMap<>();
+        patchPanelProps.put("Id", patchPanel.getId().toString());
+        patchPanelProps.put("Identifier", patchPanel.getIdentifier());
+        patchPanelProps.put("Number of Ports", String.valueOf(patchPanel.getNumberOfPorts()));
+        patchPanelProps.put("Building", patchPanel.getBuilding());
+        patchPanelProps.put("Room", patchPanel.getRoom());
+        patchPanelProps.put("Localization", patchPanel.getLocalization());
+        patchPanelProps.put("Description", patchPanel.getDescription());
+
+        StringBuilder text = new StringBuilder();
+        text.append("Patch Panel - "+ patchPanelProps.get("Identifier") +" - Properties\n");
+        for(Map.Entry<String, String> entry: patchPanelProps.entrySet()){
+            text.append("\t"+entry.getKey()+": "+entry.getValue()+"\n");
+        }
+        return text.toString();
     }
 }

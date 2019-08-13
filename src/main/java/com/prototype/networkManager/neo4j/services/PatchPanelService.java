@@ -15,5 +15,7 @@ public interface PatchPanelService {
     PatchPanel createPatchPanel(PatchPanel patchPanel);
 
     PatchPanel updatePatchPanel(Long id, PatchPanel patchPanel) throws PatchPanelNotFoundException;
+
+    String createPatchPanelReport(Long id) throws PatchPanelNotFoundException;
 }
 

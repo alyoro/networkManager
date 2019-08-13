@@ -1,0 +1,16 @@
+server:
+  port: 8090
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings
+
+spring:
+  data:
+    neo4j:
+      uri: bolt://localhost
+      username: networkManager
+      password: appPassword
+      embedded:
+        enabled: false

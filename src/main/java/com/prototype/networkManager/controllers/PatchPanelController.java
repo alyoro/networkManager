@@ -8,6 +8,7 @@ import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.PatchPanelService;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,13 +27,13 @@ public class PatchPanelController implements PortController {
 
     @GetMapping("/api/patchpanels")
     @ResponseStatus(HttpStatus.OK)
-    Iterable<PatchPanel> getPatchPanels() {
+    public Iterable<PatchPanel> getPatchPanels() {
         return patchPanelService.getPatchPanels();
     }
 
     @GetMapping("/api/patchpanels/{id}")
     @ResponseStatus(HttpStatus.OK)
-    PatchPanel getPatchPanel(@PathVariable Long id) {
+    public PatchPanel getPatchPanel(@PathVariable Long id) {
         try {
             return patchPanelService.getPatchPanel(id);
         } catch (PatchPanelNotFoundException e) {
@@ -41,7 +42,7 @@ public class PatchPanelController implements PortController {
     }
 
     @DeleteMapping("/api/patchpanels/{id}")
-    None deletePatchPanel(@PathVariable Long id) {
+    public None deletePatchPanel(@PathVariable Long id) {
         try {
             patchPanelService.deletePatchPanel(id);
             return new None();
@@ -52,7 +53,7 @@ public class PatchPanelController implements PortController {
 
     @PostMapping("/api/patchpanels")
     @ResponseStatus(HttpStatus.CREATED)
-    PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel) {
+    public PatchPanel createPatchPanel(@RequestBody PatchPanel patchPanel) {
         return patchPanelService.createPatchPanel(patchPanel);
     }
 
@@ -65,6 +66,18 @@ public class PatchPanelController implements PortController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
+    }
+
+    @GetMapping("/api/patchpanels/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getPatchPanelReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(patchPanelService.createPatchPanelReport(id));
+        } catch (PatchPanelNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     //-------------------- PortController --------------------
