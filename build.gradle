@@ -35,6 +35,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	compile("org.springframework.ldap:spring-ldap-core")
+	compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '5.1.6.RELEASE'
+	compile("org.springframework:spring-tx")
+	compile("com.unboundid:unboundid-ldapsdk")
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'

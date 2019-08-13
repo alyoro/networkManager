@@ -5,7 +5,9 @@ management:
     web:
       exposure:
         include: mappings
-
+  health:
+    ldap:
+      enabled: false
 spring:
   data:
     neo4j:
@@ -14,3 +16,4 @@ spring:
       password: appPassword
       embedded:
         enabled: false
+
