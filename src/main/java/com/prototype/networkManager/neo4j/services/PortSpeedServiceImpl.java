@@ -24,7 +24,7 @@ public class PortSpeedServiceImpl implements PortSpeedService {
     }
 
     @Override
-    public List<String> updatePortSpeedNames(String newName) throws PortSpeedNameAlreadyInDatabaseException{
+    public List<String> addPortSpeedNames(String newName) throws PortSpeedNameAlreadyInDatabaseException{
         List<String> listOfNames = portSpeedRepository.getPortSpeedTypes().get().getNames();
         if(!listOfNames.contains(newName)){
             listOfNames.add(newName);
@@ -34,6 +34,19 @@ public class PortSpeedServiceImpl implements PortSpeedService {
         portSpeedRepository.savePortSpeedTypes(listOfNames);
         return portSpeedRepository.getPortSpeedTypes().get().getNames();
     }
+
+    @Override
+    public List<String> updatePortSpeedNames(String oldName, String newName){
+        List<String> listOfNames = portSpeedRepository.getPortSpeedTypes().get().getNames();
+        if(!listOfNames.contains(oldName)){
+            listOfNames.add(newName);
+        } else {
+            listOfNames.set(listOfNames.lastIndexOf(oldName), newName);
+        }
+        portSpeedRepository.savePortSpeedTypes(listOfNames);
+        return portSpeedRepository.getPortSpeedTypes().get().getNames();
+    }
+
 
     @Override
     public List<String> deleteNameFromPortSpeed(String deletedName) throws PortSpeedNameNotFoundException {

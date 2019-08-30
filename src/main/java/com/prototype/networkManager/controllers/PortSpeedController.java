@@ -19,24 +19,29 @@ public class PortSpeedController {
     }
 
     @GetMapping("/api/portspeednames")
-    List<String> getPortSpeedNames(){
+    List<String> getPortSpeedNames() {
         return portSpeedService.getPortSpeedNames();
     }
 
     @PatchMapping("/api/portspeednames/{name}")
-    List<String> patchPortSpeedNames(@PathVariable String name){
+    List<String> addPortSpeedNames(@PathVariable String name) {
         try {
-            return portSpeedService.updatePortSpeedNames(name);
-        } catch (PortSpeedNameAlreadyInDatabaseException e){
+            return portSpeedService.addPortSpeedNames(name);
+        } catch (PortSpeedNameAlreadyInDatabaseException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
+    @PatchMapping("/api/portspeednames/{oldName}/{name}")
+    List<String> updatePortSpeedNames(@PathVariable String oldName, @PathVariable String name) {
+        return portSpeedService.updatePortSpeedNames(oldName, name);
+    }
+
     @DeleteMapping("/api/portspeednames/{name}")
-    List<String> deletePortSpeedNames(@PathVariable String name){
+    List<String> deletePortSpeedNames(@PathVariable String name) {
         try {
             return portSpeedService.deleteNameFromPortSpeed(name);
-        } catch (PortSpeedNameNotFoundException e){
+        } catch (PortSpeedNameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

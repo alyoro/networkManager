@@ -9,7 +9,9 @@ public interface PortSpeedService {
 
     List<String> getPortSpeedNames();
 
-    List<String> updatePortSpeedNames(String newName) throws PortSpeedNameAlreadyInDatabaseException;
+    List<String> addPortSpeedNames(String newName) throws PortSpeedNameAlreadyInDatabaseException;
+
+    List<String> updatePortSpeedNames(String oldName, String newName);
 
     List<String> deleteNameFromPortSpeed(String name) throws PortSpeedNameNotFoundException;
 

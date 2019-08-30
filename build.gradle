@@ -30,19 +30,19 @@ repositories {
 dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-ldap'
+	implementation 'org.springframework.boot:spring-boot-starter-data-ldap'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	compile("org.springframework.ldap:spring-ldap-core")
-	compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '5.1.6.RELEASE'
+//	compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '5.1.6.RELEASE'
 	compile("org.springframework:spring-tx")
 	compile("com.unboundid:unboundid-ldapsdk")
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+//	testImplementation 'org.springframework.security:spring-security-test'
 	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.3.1'
 	testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.23.4'
 	testCompile group: 'org.neo4j', name: 'neo4j-ogm-embedded-driver', version: '3.1.11'
