@@ -1,10 +1,6 @@
 server:
   port: 8090
 management:
-  endpoints:
-    web:
-      exposure:
-        include: mappings
   health:
     ldap:
       enabled: false
@@ -16,4 +12,8 @@ spring:
       password: appPassword
       embedded:
         enabled: false
+  ldap:
+    url: ldaps://127.0.0.1:636/
+    username: anonymous
+    baseDn: ou=2014,o=fis
 
