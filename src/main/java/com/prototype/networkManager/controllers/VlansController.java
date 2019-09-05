@@ -24,12 +24,17 @@ public class VlansController {
     }
 
     @PatchMapping("/api/vlans/{name}")
-    List<String> patchVlansNames(@PathVariable String name) {
+    List<String> addVlansNames(@PathVariable String name) {
         try {
-            return vlansService.updateVlansNames(name);
+            return vlansService.addVlansNames(name);
         } catch (VlanNameAlreadyInDatabaseException e){
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
+    }
+
+    @PatchMapping("/api/vlans/{oldName}/{name}")
+    List<String> updateVlansNames(@PathVariable String oldName, @PathVariable String name) {
+        return vlansService.updateVlansNames(oldName, name);
     }
 
     @DeleteMapping("/api/vlans/{name}")

@@ -24,12 +24,24 @@ public class VlansServiceImpl implements VlansService {
     }
 
     @Override
-    public List<String> updateVlansNames(String newName) throws VlanNameAlreadyInDatabaseException {
+    public List<String> addVlansNames(String newName) throws VlanNameAlreadyInDatabaseException {
         List<String> listOfNames = vlansRepository.getVlansTypes().get().getNames();
         if(!listOfNames.contains(newName)){
             listOfNames.add(newName);
         } else {
             throw new VlanNameAlreadyInDatabaseException("VlanName: ("+newName+") already in database.");
+        }
+        vlansRepository.saveVlansTypes(listOfNames);
+        return vlansRepository.getVlansTypes().get().getNames();
+    }
+
+    @Override
+    public List<String> updateVlansNames(String oldName, String newName) {
+        List<String> listOfNames = vlansRepository.getVlansTypes().get().getNames();
+        if (!listOfNames.contains(oldName)) {
+            listOfNames.add(newName);
+        } else {
+            listOfNames.set(listOfNames.lastIndexOf(oldName), newName);
         }
         vlansRepository.saveVlansTypes(listOfNames);
         return vlansRepository.getVlansTypes().get().getNames();

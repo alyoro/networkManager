@@ -9,7 +9,9 @@ public interface VlansService {
 
     List<String> getVlansNames();
 
-    List<String> updateVlansNames(String newName) throws VlanNameAlreadyInDatabaseException;
+    List<String> addVlansNames(String newName) throws VlanNameAlreadyInDatabaseException;
+
+    List<String> updateVlansNames(String oldName, String newName);
 
     List<String> deleteNameFromVlans(String name) throws VlanNameNotFoundException;
 }
