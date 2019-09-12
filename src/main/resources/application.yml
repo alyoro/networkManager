@@ -22,4 +22,5 @@ spring:
   ldap:
     url: ldaps://127.0.0.1:636/
     username: anonymous
-    baseDn: ou=2014,o=fis
+    baseDn: ou=staff,o=fis
+

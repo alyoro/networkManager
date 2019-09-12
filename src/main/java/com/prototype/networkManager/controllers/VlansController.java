@@ -9,6 +9,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * VLans Controller
+ * Serves API for managing vlans of the application
+ * API URL: {@code /api/vlans/}
+ */
 @RestController
 public class VlansController {
 
@@ -18,30 +23,54 @@ public class VlansController {
         this.vlansService = vlansService;
     }
 
+    /**
+     * GET ALL
+     *
+     * @return Returns all vlans in application
+     */
     @GetMapping("/api/vlans")
-    List<String> getVlansNames(){
+    List<String> getVlansNames() {
         return vlansService.getVlansNames();
     }
 
-    @PatchMapping("/api/vlans/{name}")
+    /**
+     * CREATE VLAN NAME
+     *
+     * @param name Path Variable - name of new vlan
+     * @return Updated list of all vlan names
+     */
+    @PostMapping("/api/vlans/{name}")
     List<String> addVlansNames(@PathVariable String name) {
         try {
             return vlansService.addVlansNames(name);
-        } catch (VlanNameAlreadyInDatabaseException e){
+        } catch (VlanNameAlreadyInDatabaseException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
+    /**
+     * UPDATE VLAN NAME
+     *
+     * @param oldName PathVariable - old vlan name
+     * @param name    PathVariable - new vlan name
+     * @return Updated list of all vlan names
+     */
     @PatchMapping("/api/vlans/{oldName}/{name}")
     List<String> updateVlansNames(@PathVariable String oldName, @PathVariable String name) {
         return vlansService.updateVlansNames(oldName, name);
     }
 
+    /**
+     * DELETE VLAN NAME
+     *
+     * @param name PathVariable - vlan name to delete
+     * @return Updated list of all vlan names
+     */
     @DeleteMapping("/api/vlans/{name}")
     List<String> deleteVlansNames(@PathVariable String name) {
         try {
             return vlansService.deleteNameFromVlans(name);
-        } catch (VlanNameNotFoundException e){
+        } catch (VlanNameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

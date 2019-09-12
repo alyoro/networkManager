@@ -13,6 +13,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * Utilities Controller
+ * Serves utility features
+ */
 @RestController
 public class UtilitiesController {
 
@@ -22,15 +26,29 @@ public class UtilitiesController {
         this.infoService = infoService;
     }
 
+    /**
+     * GET COUNTDEVICES
+     * API URL: {@code /api/countingdevices}
+     *
+     * @return List of counts of each device type
+     */
     @GetMapping("/api/countingdevices")
     @ResponseStatus(HttpStatus.OK)
     List<InfoServiceImpl.DeviceCount> getCountingDevices() {
         return infoService.countingDevices();
     }
 
+    /**
+     * Returns device connected to given port
+     * GET CONNECTED DEVICE
+     * API URL: {@code /api/connecteddevice/{portId}}
+     *
+     * @param portId Id of port to search device
+     * @return Entity of device connected to the given port
+     */
     @GetMapping("/api/connecteddevice/{portId}")
     @ResponseStatus(HttpStatus.OK)
-    DeviceNode getDevicesLevelUp(@PathVariable Long portId) {
+    DeviceNode getConnectedDevices(@PathVariable Long portId) {
         try {
             return infoService.connectedDeviceByPortId(portId);
         } catch (DeviceNotFoundException e) {

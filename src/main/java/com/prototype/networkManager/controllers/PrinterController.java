@@ -11,6 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Printer Controller
+ * Controller which handles requests to Printers Devices and it's ports.
+ * API Url: {@code /api/printers/}
+ */
 @RestController
 public class PrinterController implements PortController {
 
@@ -23,12 +28,23 @@ public class PrinterController implements PortController {
         this.portService = portService;
     }
 
+    /**
+     * GET ALL
+     *
+     * @return Returns all Printers in application
+     */
     @GetMapping("/api/printers")
     @ResponseStatus(HttpStatus.OK)
     Iterable<Printer> getPrinters() {
         return printerService.getPrinters();
     }
 
+    /**
+     * GET SPECIFIC DEVICE
+     *
+     * @param id ID of device to return
+     * @return Return Printer with specific ID
+     */
     @GetMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
     Printer getPrinter(@PathVariable Long id) {
@@ -39,12 +55,24 @@ public class PrinterController implements PortController {
         }
     }
 
+    /**
+     * CREATE DEVICE
+     *
+     * @param printer Request Body to save in Database
+     * @return Newly added Printer device
+     */
     @PostMapping("/api/printers")
     @ResponseStatus(HttpStatus.CREATED)
     Printer createPrinter(@RequestBody Printer printer) {
         return printerService.createPrinter(printer);
     }
 
+    /**
+     * DELETE DEVICE
+     *
+     * @param id ID of device to delete
+     * @return Empty entity when successful deletion
+     */
     @DeleteMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.OK)
     None deletePrinter(@PathVariable Long id) {
@@ -56,6 +84,13 @@ public class PrinterController implements PortController {
         }
     }
 
+    /**
+     * UPDATE DEVICE
+     *
+     * @param id      ID of device to update
+     * @param printer Request body of updated device
+     * @return Updated Printer device
+     */
     @PutMapping("/api/printers/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     Printer updatePrinter(@PathVariable Long id, @RequestBody Printer printer) {
@@ -73,6 +108,13 @@ public class PrinterController implements PortController {
         return portService;
     }
 
+    /**
+     * RETURN DEVICE PORTS
+     * Returns all ports that are part of specific device
+     *
+     * @param id ID of device
+     * @return Ports of specific device
+     */
     @Override
     @GetMapping("/api/printers/{id}/ports")
     @ResponseStatus(HttpStatus.OK)
@@ -80,6 +122,13 @@ public class PrinterController implements PortController {
         return PortController.super.getPorts(id);
     }
 
+    /**
+     * GET ONE PORT
+     * Return Specific port(portId) of specific Device(id)
+     *
+     * @param portId ID of port to GET
+     * @return Port with given port Id
+     */
     @Override
     @GetMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -87,6 +136,12 @@ public class PrinterController implements PortController {
         return PortController.super.getPort(portId);
     }
 
+    /**
+     * DELETE PORT
+     *
+     * @param portId ID of port to delete
+     * @return Empty Entity when successful delete
+     */
     @Override
     @DeleteMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -95,6 +150,13 @@ public class PrinterController implements PortController {
                 PortController.super.deletePort(portId);
     }
 
+    /**
+     * CREATE PORT FOR DEVICE
+     *
+     * @param id   ID of device to add new port
+     * @param port Request Body with Port to add
+     * @return Newly added Port Entity
+     */
     @Override
     @PostMapping("/api/printers/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
@@ -102,6 +164,13 @@ public class PrinterController implements PortController {
         return PortController.super.createPort(id, port);
     }
 
+    /**
+     * UPDATE PORT
+     *
+     * @param portId ID of port to be updated
+     * @param port   Request Body of port to update
+     * @return Updated Port
+     */
     @Override
     @PutMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -109,6 +178,12 @@ public class PrinterController implements PortController {
         return PortController.super.updatePort(portId, port);
     }
 
+    /**
+     * CHANGE PORT STATUS
+     *
+     * @param portId ID of port to change status
+     * @return Updated Port with changed status
+     */
     @Override
     @PatchMapping("/api/printers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)

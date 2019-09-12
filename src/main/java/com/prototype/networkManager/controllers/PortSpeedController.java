@@ -9,6 +9,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * PortSpeed Controller
+ * API URL: {@code /api/portspeednames}
+ */
 @RestController
 public class PortSpeedController {
 
@@ -18,12 +22,23 @@ public class PortSpeedController {
         this.portSpeedService = portSpeedService;
     }
 
+    /**
+     * GET ALL
+     *
+     * @return Returns all PortSpeed names in application
+     */
     @GetMapping("/api/portspeednames")
     List<String> getPortSpeedNames() {
         return portSpeedService.getPortSpeedNames();
     }
 
-    @PatchMapping("/api/portspeednames/{name}")
+    /**
+     * CREATE PORTSPEED NAME
+     *
+     * @param name Path Variable - name of new PortSpeed
+     * @return Updated list of all PortSpeed names
+     */
+    @PostMapping("/api/portspeednames/{name}")
     List<String> addPortSpeedNames(@PathVariable String name) {
         try {
             return portSpeedService.addPortSpeedNames(name);
@@ -32,11 +47,24 @@ public class PortSpeedController {
         }
     }
 
+    /**
+     * UPDATE PORTSPEED NAME
+     *
+     * @param oldName PathVariable - old PortSpeed name
+     * @param name    PathVariable - new PortSpeed name
+     * @return Updated list of all PortSpeed names
+     */
     @PatchMapping("/api/portspeednames/{oldName}/{name}")
     List<String> updatePortSpeedNames(@PathVariable String oldName, @PathVariable String name) {
         return portSpeedService.updatePortSpeedNames(oldName, name);
     }
 
+    /**
+     * DELETE PORTSPEED NAME
+     *
+     * @param name PathVariable - PortSpeed name to delete
+     * @return Updated list of all PortSpeed names
+     */
     @DeleteMapping("/api/portspeednames/{name}")
     List<String> deletePortSpeedNames(@PathVariable String name) {
         try {

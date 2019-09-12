@@ -10,9 +10,19 @@ import java.util.Optional;
 
 @RepositoryRestResource(exported = false)
 public interface PortSpeedRepository extends PagingAndSortingRepository<PortSpeed, Long> {
+
+    /**
+     * Return one node with property that stores all Port Speed names
+     *
+     * @return Optional of one node
+     */
     @Query("MATCH(n:PortSpeed) return n")
     Optional<PortSpeed> getPortSpeedTypes();
 
+    /**
+     * Setting updated list of Port Speed names into one node which store it
+     * @param names updated list of names
+     */
     @Query("MATCH(n:PortSpeed) SET n.names = {0}")
     void savePortSpeedTypes(List<String> names);
 }

@@ -25,6 +25,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private boolean shouldAuthenticateLdap(String username, String password) {
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter("uid", username));
+        if (username.equals("4Giera")) { //TODO only for development time
+            return ldapTemplate.authenticate("cn=" + username + "," + "ou=2014,o=fis", filter.encode(), password);
+        }
         return ldapTemplate.authenticate("cn=" + username + "," + baseDn, filter.encode(), password);
     }
 

@@ -11,9 +11,18 @@ import java.util.Optional;
 @RepositoryRestResource(exported = false)
 public interface VlansRepository extends PagingAndSortingRepository <Vlans, Long> {
 
+    /**
+     * Return one node with property that stores all Vlan names
+     *
+     * @return Optional of one node
+     */
     @Query("MATCH(n:Vlans) return n")
     Optional<Vlans> getVlansTypes();
 
+    /**
+     * Setting updated list of vlan names into one node which store it
+     * @param names updated list of names
+     */
     @Query("MATCH(n:Vlans) SET n.names = {0}")
     void saveVlansTypes(List<String> names);
 }

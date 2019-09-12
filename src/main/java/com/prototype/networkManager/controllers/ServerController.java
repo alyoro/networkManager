@@ -11,6 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+
+/**
+ * Server Controller
+ * Controller which handles requests to Servers Devices and it's ports.
+ * API Url: {@code /api/servers/}
+ */
 @RestController
 public class ServerController implements PortController {
 
@@ -23,12 +29,23 @@ public class ServerController implements PortController {
         this.portService = portService;
     }
 
+    /**
+     * GET ALL
+     *
+     * @return Returns all Servers in application
+     */
     @GetMapping("/api/servers")
     @ResponseStatus(HttpStatus.OK)
     Iterable<Server> getServers() {
         return serverService.getServers();
     }
 
+    /**
+     * GET SPECIFIC DEVICE
+     *
+     * @param id ID of device to return
+     * @return Return Server with specific ID
+     */
     @GetMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.OK)
     Server getServer(@PathVariable Long id) {
@@ -39,12 +56,24 @@ public class ServerController implements PortController {
         }
     }
 
+    /**
+     * CREATE DEVICE
+     *
+     * @param server Request Body to save in Database
+     * @return Newly added Server device
+     */
     @PostMapping("/api/servers")
     @ResponseStatus(HttpStatus.CREATED)
     Server createServer(@RequestBody Server server) {
         return serverService.createServer(server);
     }
 
+    /**
+     * DELETE DEVICE
+     *
+     * @param id ID of device to delete
+     * @return Empty entity when successful deletion
+     */
     @DeleteMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.OK)
     None deleteServer(@PathVariable Long id) {
@@ -56,6 +85,13 @@ public class ServerController implements PortController {
         }
     }
 
+    /**
+     * UPDATE DEVICE
+     *
+     * @param id     ID of device to update
+     * @param server Request body of updated device
+     * @return Updated Server device
+     */
     @PutMapping("/api/servers/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     Server updateServer(@PathVariable Long id, @RequestBody Server server) {
@@ -73,6 +109,13 @@ public class ServerController implements PortController {
         return portService;
     }
 
+    /**
+     * RETURN DEVICE PORTS
+     * Returns all ports that are part of specific device
+     *
+     * @param id ID of device
+     * @return Ports of specific device
+     */
     @Override
     @GetMapping("/api/servers/{id}/ports")
     @ResponseStatus(HttpStatus.OK)
@@ -80,6 +123,13 @@ public class ServerController implements PortController {
         return PortController.super.getPorts(id);
     }
 
+    /**
+     * GET ONE PORT
+     * Return Specific port(portId) of specific Device(id)
+     *
+     * @param portId ID of port to GET
+     * @return Port with given port Id
+     */
     @Override
     @GetMapping("/api/servers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -87,6 +137,12 @@ public class ServerController implements PortController {
         return PortController.super.getPort(portId);
     }
 
+    /**
+     * DELETE PORT
+     *
+     * @param portId ID of port to delete
+     * @return Empty Entity when successful delete
+     */
     @Override
     @DeleteMapping("/api/servers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -94,6 +150,13 @@ public class ServerController implements PortController {
         return PortController.super.deletePort(portId);
     }
 
+    /**
+     * CREATE PORT FOR DEVICE
+     *
+     * @param id   ID of device to add new port
+     * @param port Request Body with Port to add
+     * @return Newly added Port Entity
+     */
     @Override
     @PostMapping("/api/servers/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
@@ -101,6 +164,13 @@ public class ServerController implements PortController {
         return PortController.super.createPort(id, port);
     }
 
+    /**
+     * UPDATE PORT
+     *
+     * @param portId ID of port to be updated
+     * @param port   Request Body of port to update
+     * @return Updated Port
+     */
     @Override
     @PutMapping("/api/servers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -108,6 +178,12 @@ public class ServerController implements PortController {
         return PortController.super.updatePort(portId, port);
     }
 
+    /**
+     * CHANGE PORT STATUS
+     *
+     * @param portId ID of port to change status
+     * @return Updated Port with changed status
+     */
     @Override
     @PatchMapping("/api/servers/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
