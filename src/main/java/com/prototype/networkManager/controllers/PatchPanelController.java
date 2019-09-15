@@ -115,6 +115,16 @@ public class PatchPanelController implements PortController {
         }
     }
 
+    //TODO report
+    @GetMapping("/api/patchpanels/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getPatchPanelsReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(patchPanelService.createPatchPanelsReport());
+    }
+
+
     //-------------------- PortController --------------------
 
     @Override

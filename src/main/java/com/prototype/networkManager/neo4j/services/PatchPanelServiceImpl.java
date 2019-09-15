@@ -99,10 +99,35 @@ public class PatchPanelServiceImpl implements PatchPanelService {
         patchPanelProps.put("Description", patchPanel.getDescription());
 
         StringBuilder text = new StringBuilder();
-        text.append("Patch Panel - "+ patchPanelProps.get("Identifier") +" - Properties\n");
-        for(Map.Entry<String, String> entry: patchPanelProps.entrySet()){
-            text.append("\t"+entry.getKey()+": "+entry.getValue()+"\n");
+        text.append("Patch Panel - " + patchPanelProps.get("Identifier") + " - Properties\n");
+        for (Map.Entry<String, String> entry : patchPanelProps.entrySet()) {
+            text.append("\t" + entry.getKey() + ": " + entry.getValue() + "\n");
         }
         return text.toString();
     }
+
+    @Override
+    public String createPatchPanelsReport() {
+        Iterable<PatchPanel> patchPanels = this.getPatchPanels();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Patch Panels - All\n");
+        text.append("Id\t\tIdentifier\t\tNo. Ports\t\tBuilding\t\tRoom\t\tLocalization\t\tDescription\n\n");
+
+        for (PatchPanel pp : patchPanels) {
+            text.append(
+                    pp.getId() + getSepList() + pp.getIdentifier() + getSepList() + pp.getNumberOfPorts() +
+                            getSepList() + getSepList() + pp.getBuilding() + getSepList() + "\t" + pp.getRoom() + "\t" +
+                            getSepList() + pp.getLocalization() + getSepList() + pp.getDescription() + "\n"
+            );
+        }
+
+        return text.toString();
+    }
+
+    private String getSepList() {
+        return "\t\t";
+    }
+
 }
