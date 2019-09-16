@@ -71,4 +71,64 @@ public class PrinterServiceImpl implements PrinterService {
             throw new PrinterNotFoundException("Printer with id: " + id + " not found.");
         }
     }
+
+    @Override
+    public String createPrinterReport(Long id) throws PrinterNotFoundException {
+        Printer printer = this.getPrinter(id);
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - {" + printer.getIdentifier() + "} + Properties\n");
+        text.append("Id: " + printer.getId() + "\n");
+        text.append("Identifier: " + printer.getIdentifier() + "\n");
+        text.append("Number of ports: " + printer.getNumberOfPorts() + "\n");
+        text.append("Localization: " + printer.getLocalization() + "\n");
+        text.append("Ip: " + printer.getIp() + "\n");
+
+        return text.toString();
+    }
+
+    @Override
+    public String createPrintersReport() {
+        Iterable<Printer> printers = this.getPrinters();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - All\n");
+        text.append("Id" + getSepList() + "Identifier" + getSepList() + "No. Ports" + getSepList() + "Localization" + getSepList() + "Ip\n");
+
+        for (Printer printer : printers) {
+            text.append(printer.getId() + getSepList() + printer.getIdentifier() + getSepList() +
+                    printer.getNumberOfPorts() + getSepList() + printer.getLocalization() + getSepList() +
+                    printer.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    @Override
+    public String createPrintersReportCSV() {
+        Iterable<Printer> printers = this.getPrinters();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - All\n");
+        text.append("Id" + getSepListCSV() + "Identifier" + getSepListCSV() + "No. Ports" + getSepListCSV() + "Localization" + getSepListCSV() + "Ip\n");
+
+        for (Printer printer : printers) {
+            text.append(printer.getId() + getSepListCSV() + printer.getIdentifier() + getSepListCSV() +
+                    printer.getNumberOfPorts() + getSepListCSV() + printer.getLocalization() + getSepListCSV() +
+                    printer.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    private String getSepList() {
+        return "\t\t";
+    }
+
+    private String getSepListCSV() {
+        return ";";
+    }
 }

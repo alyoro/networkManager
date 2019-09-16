@@ -72,4 +72,64 @@ public class ServerServiceImpl implements ServerService {
         }
 
     }
+
+    @Override
+    public String createServerReport(Long id) throws ServerNotFoundException {
+        Server server = this.getServer(id);
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - {" + server.getIdentifier() + "} + Properties\n");
+        text.append("Id: " + server.getId() + "\n");
+        text.append("Identifier: " + server.getIdentifier() + "\n");
+        text.append("Number of ports: " + server.getNumberOfPorts() + "\n");
+        text.append("Localization: " + server.getLocalization() + "\n");
+        text.append("Ip: " + server.getIp() + "\n");
+
+        return text.toString();
+    }
+
+    @Override
+    public String createServersReport() {
+        Iterable<Server> servers = this.getServers();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - All\n");
+        text.append("Id" + getSepList() + "Identifier" + getSepList() + "No. Ports" + getSepList() + "Localization" + getSepList() + "Ip\n");
+
+        for (Server server : servers) {
+            text.append(server.getId() + getSepList() + server.getIdentifier() + getSepList() +
+                    server.getNumberOfPorts() + getSepList() + server.getLocalization() + getSepList() +
+                    server.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    @Override
+    public String createServersReportCSV() {
+        Iterable<Server> servers = this.getServers();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Server - All\n");
+        text.append("Id" + getSepListCSV() + "Identifier" + getSepListCSV() + "No. Ports" + getSepListCSV() + "Localization" + getSepListCSV() + "Ip\n");
+
+        for (Server server : servers) {
+            text.append(server.getId() + getSepListCSV() + server.getIdentifier() + getSepListCSV() +
+                    server.getNumberOfPorts() + getSepListCSV() + server.getLocalization() + getSepListCSV() +
+                    server.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    private String getSepList() {
+        return "\t\t";
+    }
+
+    private String getSepListCSV() {
+        return ";";
+    }
 }

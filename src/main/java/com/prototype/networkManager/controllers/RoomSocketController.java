@@ -8,8 +8,12 @@ import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.RoomSocketService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * RoomSocket Controller
@@ -99,6 +103,41 @@ public class RoomSocketController implements PortController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
+    }
+
+    //TODO report
+    @GetMapping("/api/roomsockets/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getRoomSocketReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(roomSocketService.createRoomSocketReport(id));
+        } catch (RoomSocketNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/roomsockets/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getRoomSocketsReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(roomSocketService.createRoomSocketsReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/roomsockets/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getRoomSocketsReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(roomSocketService.createRoomSocketsReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
     //-------------------- PortController --------------------

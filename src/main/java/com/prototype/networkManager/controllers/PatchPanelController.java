@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * PatchPanel Controller
  * Controller which handles requests to PatchPanels Devices and it's ports.
@@ -122,6 +125,19 @@ public class PatchPanelController implements PortController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Content-Disposition", "attachment; filename=report.txt")
                 .body(patchPanelService.createPatchPanelsReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/patchpanels/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getPatchPanelsReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(patchPanelService.createPatchPanelsReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
 

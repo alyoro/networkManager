@@ -71,4 +71,64 @@ public class AccessPointServiceImpl implements AccessPointService {
             throw new AccessPointNotFoundException("AccessPoint with id: " + id + " not found.");
         }
     }
+
+    @Override
+    public String createAccessPointReport(Long id) throws AccessPointNotFoundException {
+        AccessPoint accessPoint = this.getAccessPoint(id);
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Access Point - {" + accessPoint.getIdentifier() + "} + Properties\n");
+        text.append("Id: " + accessPoint.getId() + "\n");
+        text.append("Identifier: " + accessPoint.getIdentifier() + "\n");
+        text.append("Number of ports: " + accessPoint.getNumberOfPorts() + "\n");
+        text.append("Localization: " + accessPoint.getLocalization() + "\n");
+        text.append("Ip: " + accessPoint.getIp() + "\n");
+
+        return text.toString();
+    }
+
+    @Override
+    public String createAccessPointsReport() {
+        Iterable<AccessPoint> accessPoints = this.getAccessPoints();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Access Point - All\n");
+        text.append("Id" + getSepList() + "Identifier" + getSepList() + "No. Ports" + getSepList() + "Localization" + getSepList() + "Ip\n");
+
+        for (AccessPoint accessPoint : accessPoints) {
+            text.append(accessPoint.getId() + getSepList() + accessPoint.getIdentifier() + getSepList() +
+                    accessPoint.getNumberOfPorts() + getSepList() + accessPoint.getLocalization() + getSepList() +
+                    accessPoint.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    @Override
+    public String createAccessPointsReportCSV() {
+        Iterable<AccessPoint> accessPoints = this.getAccessPoints();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Access Point - All\n");
+        text.append("Id" + getSepListCSV() + "Identifier" + getSepListCSV() + "No. Ports" + getSepListCSV() + "Localization" + getSepListCSV() + "Ip\n");
+
+        for (AccessPoint accessPoint : accessPoints) {
+            text.append(accessPoint.getId() + getSepListCSV() + accessPoint.getIdentifier() + getSepListCSV() +
+                    accessPoint.getNumberOfPorts() + getSepListCSV() + accessPoint.getLocalization() + getSepListCSV() +
+                    accessPoint.getIp() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    private String getSepList() {
+        return "\t\t";
+    }
+
+    private String getSepListCSV() {
+        return ";";
+    }
 }

@@ -118,8 +118,26 @@ public class PatchPanelServiceImpl implements PatchPanelService {
         for (PatchPanel pp : patchPanels) {
             text.append(
                     pp.getId() + getSepList() + pp.getIdentifier() + getSepList() + pp.getNumberOfPorts() +
-                            getSepList() + getSepList() + pp.getBuilding() + getSepList() + "\t" + pp.getRoom() + "\t" +
-                            getSepList() + pp.getLocalization() + getSepList() + pp.getDescription() + "\n"
+                            getSepList() + pp.getBuilding() + getSepList() + pp.getRoom() + getSepList() +
+                            pp.getLocalization() + getSepList() + pp.getDescription() + "\n"
+            );
+        }
+
+        return text.toString();
+    }
+
+    @Override
+    public String createPatchPanelsReportCSV() {
+        Iterable<PatchPanel> patchPanels = this.getPatchPanels();
+        StringBuilder text = new StringBuilder();
+        text.append("Patch Panels - All\n");
+        text.append("Id;Identifier;No. Ports;Building;Room;Localization;Description\n");
+
+        for (PatchPanel pp : patchPanels) {
+            text.append(
+                    pp.getId() + getSepListCSV() + pp.getIdentifier() + getSepListCSV() + pp.getNumberOfPorts() +
+                            getSepListCSV() + pp.getBuilding() + getSepListCSV() + pp.getRoom() + getSepListCSV() +
+                            pp.getLocalization() + getSepListCSV() + pp.getDescription() + "\n"
             );
         }
 
@@ -128,6 +146,10 @@ public class PatchPanelServiceImpl implements PatchPanelService {
 
     private String getSepList() {
         return "\t\t";
+    }
+
+    private String getSepListCSV() {
+        return ";";
     }
 
 }

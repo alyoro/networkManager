@@ -14,4 +14,10 @@ public interface PrinterService {
     Printer createPrinter(Printer printer);
 
     Printer updatePrinter(Long id, Printer printer) throws PrinterNotFoundException;
+
+    String createPrinterReport(Long id) throws PrinterNotFoundException;
+
+    String createPrintersReport();
+
+    String createPrintersReportCSV();
 }

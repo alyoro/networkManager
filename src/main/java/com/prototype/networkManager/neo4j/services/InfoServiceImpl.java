@@ -23,7 +23,7 @@ public class InfoServiceImpl implements InfoService {
     public List<DeviceCount> countingDevices() {
         List<DeviceCount> countDevicesByType = new ArrayList<>();
         for (DeviceType deviceType : DeviceType.values()) {
-            if (deviceType.equals(DeviceType.None) || deviceType.equals(DeviceType.RoomSocket)) continue;
+            if (deviceType.equals(DeviceType.None)) continue;
             countDevicesByType.add(new DeviceCount(
                     deviceType.toString(),
                     deviceNodeService.getNumberOfDevicesByType(deviceType.toString())));

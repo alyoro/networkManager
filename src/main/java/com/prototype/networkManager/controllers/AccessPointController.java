@@ -8,8 +8,12 @@ import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.services.AccessPointService;
 import com.prototype.networkManager.neo4j.services.PortService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * AccessPoint Controller
@@ -99,6 +103,41 @@ public class AccessPointController implements PortController {
             return accessPointService.updateAccessPoint(id, accessPoint);
         } catch (AccessPointNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/accesspoints/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getAccessPointReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(accessPointService.createAccessPointReport(id));
+        } catch (AccessPointNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/accesspoints/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getAccessPointsReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(accessPointService.createAccessPointsReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/accesspoints/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getAccessPointsReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(accessPointService.createAccessPointsReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 

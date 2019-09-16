@@ -11,7 +11,6 @@ public class RoomSocket extends DeviceNode {
 
     private String building;
     private String room;
-    private String identifier;
     private String description;
 
 }

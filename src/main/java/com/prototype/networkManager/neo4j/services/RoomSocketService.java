@@ -14,4 +14,10 @@ public interface RoomSocketService {
     RoomSocket createRoomSocket(RoomSocket roomSocket);
 
     RoomSocket updateRoomSocket(Long id, RoomSocket roomSocket) throws RoomSocketNotFoundException;
+
+    String createRoomSocketReport(Long id) throws RoomSocketNotFoundException;
+
+    String createRoomSocketsReport();
+
+    String createRoomSocketsReportCSV();
 }

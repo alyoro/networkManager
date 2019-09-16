@@ -62,7 +62,7 @@ public class RoomSocketServiceImpl implements RoomSocketService {
     @Override
     public RoomSocket updateRoomSocket(Long id, RoomSocket roomSocket) throws RoomSocketNotFoundException {
         Optional<RoomSocket> roomSocketOptional = roomSocketRepository.findById(id);
-        if(roomSocketOptional.isPresent()){
+        if (roomSocketOptional.isPresent()) {
             roomSocketOptional.get().setBuilding(roomSocket.getBuilding());
             roomSocketOptional.get().setRoom(roomSocket.getRoom());
             roomSocketOptional.get().setIdentifier(roomSocket.getIdentifier());
@@ -70,7 +70,68 @@ public class RoomSocketServiceImpl implements RoomSocketService {
 
             return roomSocketRepository.save(roomSocketOptional.get());
         } else {
-            throw new RoomSocketNotFoundException("RoomSocekt with id: "+id+" not found");
+            throw new RoomSocketNotFoundException("RoomSocket with id: " + id + " not found");
         }
+    }
+
+    @Override
+    public String createRoomSocketReport(Long id) throws RoomSocketNotFoundException {
+        RoomSocket roomSocket = this.getRoomSocket(id);
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Room Socket - {" + roomSocket.getIdentifier() + "} + Properties\n");
+        text.append("Id: " + roomSocket.getId() + "\n");
+        text.append("Identifier: " + roomSocket.getIdentifier() + "\n");
+        text.append("Number of ports: " + roomSocket.getNumberOfPorts() + "\n");
+        text.append("Building: " + roomSocket.getBuilding() + "\n");
+        text.append("Room: " + roomSocket.getRoom() + "\n");
+        text.append("Description: " + roomSocket.getDescription() + "\n");
+
+        return text.toString();
+    }
+
+    @Override
+    public String createRoomSocketsReport() {
+        Iterable<RoomSocket> roomSockets = this.getRoomSockets();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Room Socket - All\n");
+        text.append("Id" + getSepList() + "Identifier" + getSepList() + "No. Ports" + getSepList() + "Building" + getSepList() + "Room" + getSepList() + "Description" + "\n");
+
+        for (RoomSocket roomSocket : roomSockets) {
+            text.append(roomSocket.getId() + getSepList() + roomSocket.getIdentifier() + getSepList() +
+                    roomSocket.getNumberOfPorts() + getSepList() + roomSocket.getBuilding() + getSepList() +
+                    roomSocket.getRoom() + getSepList() + roomSocket.getDescription() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    @Override
+    public String createRoomSocketsReportCSV() {
+        Iterable<RoomSocket> roomSockets = this.getRoomSockets();
+
+        StringBuilder text = new StringBuilder();
+
+        text.append("Room Socket - All\n");
+        text.append("Id" + getSepList() + "Identifier" + getSepListCSV() + "No. Ports" + getSepListCSV() + "Building" + getSepListCSV() + "Room" + getSepListCSV() + "Description" + "\n");
+
+        for (RoomSocket roomSocket : roomSockets) {
+            text.append(roomSocket.getId() + getSepListCSV() + roomSocket.getIdentifier() + getSepListCSV() +
+                    roomSocket.getNumberOfPorts() + getSepListCSV() + roomSocket.getBuilding() + getSepListCSV() +
+                    roomSocket.getRoom() + getSepListCSV() + roomSocket.getDescription() + "\n");
+        }
+
+        return text.toString();
+    }
+
+    private String getSepList() {
+        return "\t\t";
+    }
+
+    private String getSepListCSV() {
+        return ";";
     }
 }

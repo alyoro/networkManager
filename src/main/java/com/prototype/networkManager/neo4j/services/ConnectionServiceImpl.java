@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @Transactional
@@ -44,6 +45,17 @@ public class ConnectionServiceImpl implements ConnectionService {
         return connectionRepository.getStartAndEndNode(connectionId).get(0);
     }
 
+
+    private boolean ifConnectionsAreSameType(List<Connection> connections, ConnectionType connectionType) {
+        AtomicBoolean result = new AtomicBoolean(false);
+        connections.forEach(c -> {
+            if (c.getConnectionType() == connectionType) {
+                result.set(true);
+            }
+        });
+        return result.get();
+    }
+
     @Override
     public Connection makeConnection(List<Port> ports, ConnectionType connectionType) throws ConnectionCantCreatedException, PortNotFoundException {
 
@@ -51,7 +63,8 @@ public class ConnectionServiceImpl implements ConnectionService {
         Optional<Port> portSlave = portRepository.findById(ports.get(1).getId());
 
         if (portMaster.isPresent() && portSlave.isPresent()) {
-            if (portMaster.get().getConnections() == null && portSlave.get().getConnections() == null) {
+            if ((portMaster.get().getConnections()) == null || this.ifConnectionsAreSameType(portMaster.get().getConnections(), connectionType)
+                    || (portSlave.get().getConnections() == null || this.ifConnectionsAreSameType(portSlave.get().getConnections(), connectionType))) {
                 try {
                     Connection newConnection = new Connection();
                     newConnection.setConnectionType(connectionType);

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Switch extends DeviceNode {
 
-    private String identifier;
     private String localization;
     private String dateOfPurchase;
     private String managementIP;

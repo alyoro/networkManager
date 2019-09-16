@@ -8,8 +8,12 @@ import com.prototype.networkManager.neo4j.exceptions.PrinterNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.PrinterService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Printer Controller
@@ -98,6 +102,41 @@ public class PrinterController implements PortController {
             return printerService.updatePrinter(id, printer);
         } catch (PrinterNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/printers/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getAccessPointReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(printerService.createPrinterReport(id));
+        } catch (PrinterNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/printers/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getPrintersReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(printerService.createPrintersReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/printers/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getPrintersReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(printerService.createPrintersReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
         }
     }
 

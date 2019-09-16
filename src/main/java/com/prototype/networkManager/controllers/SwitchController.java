@@ -8,8 +8,12 @@ import com.prototype.networkManager.neo4j.exceptions.SwitchNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.SwitchService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Switch Controller
@@ -100,6 +104,42 @@ public class SwitchController implements PortController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
+    }
+
+
+    //TODO report
+    @GetMapping("/api/switches/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getSwitchReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(switchService.createSwitchReport(id));
+        } catch (SwitchNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    //TODO report
+    @GetMapping("/api/switches/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getSwitchesReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(switchService.createSwitchesReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/switches/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getSwitchesReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(switchService.createSwitchesReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
     //-------------------- PortController --------------------

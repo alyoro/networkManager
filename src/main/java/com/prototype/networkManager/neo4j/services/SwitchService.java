@@ -14,4 +14,10 @@ public interface SwitchService {
     Switch createSwitch(Switch switchDevice);
 
     Switch updateSwitch(Long id, Switch switchDevice) throws SwitchNotFoundException;
+
+    String createSwitchReport(Long id) throws SwitchNotFoundException;
+
+    String createSwitchesReport();
+
+    String createSwitchesReportCSV();
 }

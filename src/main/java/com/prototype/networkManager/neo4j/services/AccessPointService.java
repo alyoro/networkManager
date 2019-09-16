@@ -14,4 +14,10 @@ public interface AccessPointService {
     AccessPoint createAccessPoint(AccessPoint accessPoint);
 
     AccessPoint updateAccessPoint(Long id, AccessPoint accessPoint) throws AccessPointNotFoundException;
+
+    String createAccessPointReport(Long id) throws AccessPointNotFoundException;
+
+    String createAccessPointsReport();
+
+    String createAccessPointsReportCSV();
 }

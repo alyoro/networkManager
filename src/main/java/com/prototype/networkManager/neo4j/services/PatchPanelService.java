@@ -19,5 +19,7 @@ public interface PatchPanelService {
     String createPatchPanelReport(Long id) throws PatchPanelNotFoundException;
 
     String createPatchPanelsReport();
+
+    String createPatchPanelsReportCSV();
 }
 
