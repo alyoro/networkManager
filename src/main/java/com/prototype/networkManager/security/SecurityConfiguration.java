@@ -1,5 +1,7 @@
 package com.prototype.networkManager.security;
 
+import com.prototype.networkManager.neo4j.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,6 +26,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final CustomAuthenticationProvider authProvider;
 
+    @Autowired
+    UserRepository userRepository;
+
     public SecurityConfiguration(CustomAuthenticationProvider authProvider) {
         this.authProvider = authProvider;
     }
@@ -37,10 +42,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/authenticate").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.GET).authenticated()
+                .antMatchers(HttpMethod.POST).hasAnyAuthority("ADMIN", "EDITOR")
+                .antMatchers(HttpMethod.PUT).hasAnyAuthority("ADMIN", "EDITOR")
+                .antMatchers(HttpMethod.PATCH).hasAnyAuthority("ADMIN", "EDITOR")
+                .antMatchers(HttpMethod.DELETE).hasAnyAuthority("ADMIN", "EDITOR")
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

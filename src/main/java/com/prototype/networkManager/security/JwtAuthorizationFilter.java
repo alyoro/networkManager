@@ -1,5 +1,7 @@
 package com.prototype.networkManager.security;
 
+import com.prototype.networkManager.neo4j.domain.User;
+import com.prototype.networkManager.neo4j.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -9,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -17,12 +21,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
-    JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    UserRepository userRepository;
+
+    JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -52,7 +61,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                         .getSubject();
 
                 if (StringUtils.isNotEmpty(username)) {
-                    return new UsernamePasswordAuthenticationToken(username, null, null);
+                    Optional<User> user = userRepository.findUserByName(username);
+                    if (user.isPresent()) {
+                        ArrayList<GrantedAuthority> roles = new ArrayList<>();
+                        for (String role : user.get().getRoles()) {
+                            roles.add(new SimpleGrantedAuthority(role));
+                        }
+                        return new UsernamePasswordAuthenticationToken(username, null, roles);
+                    }
                 }
             } catch (ExpiredJwtException exception) {
                 log.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
