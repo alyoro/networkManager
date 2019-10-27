@@ -4,13 +4,6 @@ management:
   health:
     ldap:
       enabled: false
-  endpoints:
-    web:
-      cors:
-        allowed-headers: Authorization
-        allowed-origins: http://localhost:8080
-        allowed-methods: GET", POST, PUT, PATCH, DELETE
-        exposed-headers: Authorization
 spring:
   data:
     neo4j:
@@ -20,7 +13,7 @@ spring:
       embedded:
         enabled: false
   ldap:
-    url: ldaps://127.0.0.1:636/
+    url: ldaps://149.156.110.3:636/
     username: anonymous
     baseDn: ou=staff,o=fis
 

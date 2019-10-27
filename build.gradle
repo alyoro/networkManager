@@ -16,7 +16,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'groovy'
 
 group = 'com.prototype'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-WFIIS'
 sourceCompatibility = '11'
 
 test {
