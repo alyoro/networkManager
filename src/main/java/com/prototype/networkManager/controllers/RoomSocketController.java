@@ -3,13 +3,23 @@ package com.prototype.networkManager.controllers;
 import com.prototype.networkManager.neo4j.domain.None;
 import com.prototype.networkManager.neo4j.domain.Port;
 import com.prototype.networkManager.neo4j.domain.RoomSocket;
+import com.prototype.networkManager.neo4j.exceptions.PortNotFoundException;
 import com.prototype.networkManager.neo4j.exceptions.RoomSocketNotFoundException;
 import com.prototype.networkManager.neo4j.services.PortService;
 import com.prototype.networkManager.neo4j.services.RoomSocketService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * RoomSocket Controller
+ * Controller which handles requests to Room Sockets Devices and it's ports.
+ * API Url: {@code /api/roomsockets/}
+ */
 @RestController
 public class RoomSocketController implements PortController {
 
@@ -22,11 +32,22 @@ public class RoomSocketController implements PortController {
         this.portService = portService;
     }
 
+    /**
+     * GET ALL
+     *
+     * @return Returns all Room Sockets in application
+     */
     @GetMapping("/api/roomsockets")
     Iterable<RoomSocket> getRoomSocket() {
         return roomSocketService.getRoomSockets();
     }
 
+    /**
+     * GET SPECIFIC DEVICE
+     *
+     * @param id ID of device to return
+     * @return Return Room Socket with specific ID
+     */
     @GetMapping("/api/roomsockets/{id}")
     @ResponseStatus(HttpStatus.OK)
     RoomSocket getRoomSocket(@PathVariable Long id) {
@@ -37,20 +58,86 @@ public class RoomSocketController implements PortController {
         }
     }
 
+    /**
+     * CREATE DEVICE
+     *
+     * @param roomSocket Request Body to save in Database
+     * @return Newly added Room Socket device
+     */
+    @PostMapping("/api/roomsockets")
+    @ResponseStatus(HttpStatus.CREATED)
+    RoomSocket createRoomSocket(@RequestBody RoomSocket roomSocket) {
+        return roomSocketService.createRoomSocket(roomSocket);
+    }
+
+    /**
+     * DELETE DEVICE
+     *
+     * @param id ID of device to delete
+     * @return Empty entity when successful deletion
+     */
     @DeleteMapping("/api/roomsockets/{id}")
     @ResponseStatus(HttpStatus.OK)
-    void deleteRoomSocket(@PathVariable Long id) {
+    None deleteRoomSocket(@PathVariable Long id) {
         try {
             roomSocketService.deleteRoomSocket(id);
+            return new None();
+        } catch (RoomSocketNotFoundException | PortNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    /**
+     * UPDATE DEVICE
+     *
+     * @param id         ID of device to update
+     * @param roomSocket Request body of updated device
+     * @return Updated Room Socket device
+     */
+    @PutMapping("/api/roomsockets/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    RoomSocket updatePatchPanel(@PathVariable Long id, @RequestBody RoomSocket roomSocket) {
+        try {
+            return roomSocketService.updateRoomSocket(id, roomSocket);
+        } catch (RoomSocketNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+
+    //TODO report
+    @GetMapping("/api/roomsockets/{id}/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getRoomSocketReport(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Content-Disposition", "attachment; filename=report.txt")
+                    .body(roomSocketService.createRoomSocketReport(id));
         } catch (RoomSocketNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @PostMapping("/api/roomsockets")
-    @ResponseStatus(HttpStatus.CREATED)
-    RoomSocket createRoomSocket(@RequestBody RoomSocket switchDevice) {
-        return roomSocketService.createRoomSocket(switchDevice);
+    //TODO report
+    @GetMapping("/api/roomsockets/report")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> getRoomSocketsReport() {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Content-Disposition", "attachment; filename=report.txt")
+                .body(roomSocketService.createRoomSocketsReport());
+    }
+
+    //TODO report
+    @GetMapping(value = "/api/roomsockets/report/csv", produces = "text/csv")
+    @ResponseStatus(HttpStatus.OK)
+    public void getRoomSocketsReportCSV(HttpServletResponse response) {
+        try {
+            response.setContentType("text/plain; charset=utf-8");
+            response.addHeader("Content-Disposition", "attachment; filename=report.csv");
+            response.getWriter().print(roomSocketService.createRoomSocketsReportCSV());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 
     //-------------------- PortController --------------------
@@ -60,7 +147,13 @@ public class RoomSocketController implements PortController {
         return portService;
     }
 
-
+    /**
+     * RETURN DEVICE PORTS
+     * Returns all ports that are part of specific device
+     *
+     * @param id ID of device
+     * @return Ports of specific device
+     */
     @Override
     @GetMapping("/api/roomsockets/{id}/ports")
     @ResponseStatus(HttpStatus.OK)
@@ -68,6 +161,13 @@ public class RoomSocketController implements PortController {
         return PortController.super.getPorts(id);
     }
 
+    /**
+     * GET ONE PORT
+     * Return Specific port(portId) of specific Device(id)
+     *
+     * @param portId ID of port to GET
+     * @return Port with given port Id
+     */
     @Override
     @GetMapping("/api/roomsockets/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -75,14 +175,26 @@ public class RoomSocketController implements PortController {
         return PortController.super.getPort(portId);
     }
 
+    /**
+     * DELETE PORT
+     *
+     * @param portId ID of port to delete
+     * @return Empty Entity when successful delete
+     */
     @Override
     @DeleteMapping("/api/roomsockets/{id}/ports/{portId}")
-
     @ResponseStatus(HttpStatus.OK)
     public None deletePort(@PathVariable Long portId) {
         return PortController.super.deletePort(portId);
     }
 
+    /**
+     * CREATE PORT FOR DEVICE
+     *
+     * @param id   ID of device to add new port
+     * @param port Request Body with Port to add
+     * @return Newly added Port Entity
+     */
     @Override
     @PostMapping("/api/roomsockets/{id}/ports")
     @ResponseStatus(HttpStatus.CREATED)
@@ -90,6 +202,13 @@ public class RoomSocketController implements PortController {
         return PortController.super.createPort(id, port);
     }
 
+    /**
+     * UPDATE PORT
+     *
+     * @param portId ID of port to be updated
+     * @param port   Request Body of port to update
+     * @return Updated Port
+     */
     @Override
     @PutMapping("/api/roomsockets/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)
@@ -97,6 +216,12 @@ public class RoomSocketController implements PortController {
         return PortController.super.updatePort(portId, port);
     }
 
+    /**
+     * CHANGE PORT STATUS
+     *
+     * @param portId ID of port to change status
+     * @return Updated Port with changed status
+     */
     @Override
     @PatchMapping("/api/roomsockets/{id}/ports/{portId}")
     @ResponseStatus(HttpStatus.OK)

@@ -12,4 +12,12 @@ public interface SwitchService {
     void deleteSwitch(Long id) throws SwitchNotFoundException, PortNotFoundException;
 
     Switch createSwitch(Switch switchDevice);
+
+    Switch updateSwitch(Long id, Switch switchDevice) throws SwitchNotFoundException;
+
+    String createSwitchReport(Long id) throws SwitchNotFoundException;
+
+    String createSwitchesReport();
+
+    String createSwitchesReportCSV();
 }

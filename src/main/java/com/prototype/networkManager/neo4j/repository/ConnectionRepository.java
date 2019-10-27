@@ -20,6 +20,12 @@ public interface ConnectionRepository extends PagingAndSortingRepository<Connect
             "RETURN c")
     Iterable<Map<String, Object>> saveConnection(Long portIdMaster, Long portIdSlave, List<String> vlans);
 
+    /**
+     * Returns Map of two ports - portMaster and portSlave
+     *
+     * @param id Of connection to return start and end node
+     * @return Returns Map of two ports - portMaster and portSlave
+     */
     @Query("MATCH(startPort:Port)-[c:CONNECTION]->(endPort:Port) WHERE ID(c)={0} RETURN startPort AS portSlave, endPort AS portMaster")
     List<Map<String, Port>> getStartAndEndNode(Long id);
 }

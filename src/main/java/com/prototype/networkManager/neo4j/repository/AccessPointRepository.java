@@ -7,5 +7,12 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(exported = false)
 public interface AccessPointRepository extends PagingAndSortingRepository<AccessPoint, Long> {
+
+    /**
+     * Returns all Access Points in database
+     *
+     * @param depth Neo4j parameter - how deep to search
+     * @return List of all AccessPoints
+     */
     Iterable<AccessPoint> findAll(@Depth int depth);
 }

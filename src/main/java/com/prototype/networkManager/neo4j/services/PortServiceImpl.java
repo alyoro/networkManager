@@ -2,13 +2,10 @@ package com.prototype.networkManager.neo4j.services;
 
 import com.prototype.networkManager.neo4j.domain.DeviceNode;
 import com.prototype.networkManager.neo4j.domain.Port;
-import com.prototype.networkManager.neo4j.domain.enums.DeviceType;
-import com.prototype.networkManager.neo4j.domain.enums.PortSpeed;
 import com.prototype.networkManager.neo4j.domain.enums.PortStatus;
 import com.prototype.networkManager.neo4j.exceptions.*;
-import com.prototype.networkManager.neo4j.repository.ConnectionRepository;
-import com.prototype.networkManager.neo4j.repository.DeviceNodeRepository;
 import com.prototype.networkManager.neo4j.repository.PortRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,28 +16,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@AllArgsConstructor
 @Service
 @Transactional
 public class PortServiceImpl implements PortService {
 
     private final PortRepository portRepository;
 
-    private final DeviceNodeRepository deviceNodeRepository;
+    private final DeviceNodeService deviceNodeService;
 
     private final HelperFunctions helperFunctions;
 
-    private final ConnectionRepository connectionRepository;
-
-    public PortServiceImpl(
-            PortRepository portRepository,
-            DeviceNodeRepository deviceNodeRepository,
-            HelperFunctions helperFunctions, ConnectionRepository
-                    connectionRepository) {
-        this.portRepository = portRepository;
-        this.deviceNodeRepository = deviceNodeRepository;
-        this.helperFunctions = helperFunctions;
-        this.connectionRepository = connectionRepository;
-    }
+    private final ConnectionService connectionService;
 
     @Override
     public Port getPort(Long id) throws PortNotFoundException {
@@ -59,7 +46,7 @@ public class PortServiceImpl implements PortService {
 
     @Override
     public Iterable<Port> getPorts(Long id) {
-        return deviceNodeRepository.getPorts(id);
+        return deviceNodeService.getDevicePorts(id);
     }
 
     @Override
@@ -76,7 +63,7 @@ public class PortServiceImpl implements PortService {
                 } else {
                     otherPort = portRepository.findById(portOptional.get().getConnections().get(0).getPortIdStart());
                 }
-                otherPort.get().setDevicePlugged(DeviceType.None);
+                otherPort.get().setDevicePlugged("None");
                 otherPort.get().setPortOnTheOtherElement("None");
                 portRepository.save(otherPort.get());
                 portRepository.delete(portOptional.get());
@@ -89,46 +76,45 @@ public class PortServiceImpl implements PortService {
     @Override
     public Port createPort(Long id, Port port)
             throws DeviceNotFoundException, MaximumPortNumberReachedException, PortNumberAlreadyInListException {
-        Optional<DeviceNode> node = deviceNodeRepository.findById(id);
-        if (node.isEmpty()) {
-            throw new DeviceNotFoundException("Device with id: " + id + " not found.");
-        } else {
-            List<Port> ports = node.get().getPorts();
-            port.setDevicePlugged(DeviceType.None);
-            port.setPortOnTheOtherElement("None");
-            if (ports != null) {
-                if (node.get().getNumberOfPorts() == ports.size()) {
-                    throw new MaximumPortNumberReachedException("Cant put more ports in this device");
-                }
-                if (helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())) {
-                    ports.add(port);
-                } else {
-                    throw new PortNumberAlreadyInListException("Port with this number already added to device");
-                }
-            } else {
-                if (node.get().getNumberOfPorts() > 0) {
-                    ports = new ArrayList<>();
-                    ports.add(port);
-                } else {
-                    throw new MaximumPortNumberReachedException("Cant put more ports in this device");
-                }
+        DeviceNode node = deviceNodeService.getDeviceNodeById(id,1);
+        List<Port> ports = node.getPorts();
+        port.setDevicePlugged("None");
+        port.setPortOnTheOtherElement("None");
+        if (ports != null) {
+            if (node.getNumberOfPorts() == ports.size()) {
+                node.setNumberOfPorts(node.getNumberOfPorts() + 1);
             }
-            node.get().setPorts(ports);
-            deviceNodeRepository.save(node.get());
-            return port;
+            if (helperFunctions.arePortNumberListUnique(ports, port.getPortNumber())) {
+                ports.add(port);
+            } else {
+                throw new PortNumberAlreadyInListException("Port with this number already added to device");
+            }
+        } else {
+            if (node.getNumberOfPorts() > 0) {
+                ports = new ArrayList<>();
+                ports.add(port);
+            } else {
+                throw new MaximumPortNumberReachedException("Cant put more ports in this device");
+            }
         }
+        node.setPorts(ports);
+        deviceNodeService.save(node);
+        return port;
+
     }
 
     @Override
-    public List<Port> createMultiplePorts(Integer numberOfPorts) {
+    public List<Port> createMultiplePorts(Integer numberOfPorts, boolean logical) {
         ArrayList<Port> ports = new ArrayList<>();
         for (int i = 0; i < numberOfPorts; i++) {
             ports.add(new Port(
                     i + 1,
-                    DeviceType.None,
                     "None",
-                    PortSpeed.Ethernet1Gb,
-                    PortStatus.DOWN
+                    "None",
+                    "Ethernet1Gb",
+                    PortStatus.DOWN,
+                    logical,
+                    logical ? new ArrayList<>() : null
             ));
         }
         return StreamSupport.stream(portRepository.saveAll(ports).spliterator(), false)
@@ -143,26 +129,25 @@ public class PortServiceImpl implements PortService {
         } else {
             if (portOptional.get().getConnections() == null) {
                 portOptional.get().setPortOnTheOtherElement("None");
-                portOptional.get().setDevicePlugged(DeviceType.None);
+                portOptional.get().setDevicePlugged("None");
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
+                portOptional.get().setVlans(port.getVlans());
 
                 return portRepository.save(portOptional.get());
             } else {
-                Map<String, Port> portsOfConnection = connectionRepository.getStartAndEndNode(
-                        portOptional.get().getConnections().get(0).getId()).get(0);
+                Map<String, Port> portsOfConnection = connectionService.getStartAndEndNode(
+                        portOptional.get().getConnections().get(0).getId());
                 Port portMaster = portsOfConnection.get("portMaster");
                 Port portSlave = portsOfConnection.get("portSlave");
 
-                System.out.println(portSlave.getId());
-
                 portOptional.get().setPortNumber(port.getPortNumber());
                 portOptional.get().setPortSpeed(port.getPortSpeed());
+                portOptional.get().setVlans(port.getVlans());
+
                 if (port.getId() == portMaster.getId()) {
                     portSlave.setPortOnTheOtherElement(String.valueOf(port.getPortNumber()));
-                    portSlave = portRepository.save(portSlave);
-
-                    System.out.println(portSlave.toString());
+                    portRepository.save(portSlave);
                 }
                 return portRepository.save(portOptional.get());
             }

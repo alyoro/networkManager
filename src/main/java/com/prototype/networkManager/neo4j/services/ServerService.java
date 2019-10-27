@@ -12,4 +12,12 @@ public interface ServerService {
     void deleteServer(Long id) throws ServerNotFoundException, PortNotFoundException;
 
     Server createServer(Server server);
+
+    Server updateServer(Long id, Server server) throws ServerNotFoundException;
+
+    String createServerReport(Long id) throws ServerNotFoundException;
+
+    String createServersReport();
+
+    String createServersReportCSV();
 }

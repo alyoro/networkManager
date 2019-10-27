@@ -12,4 +12,12 @@ public interface AccessPointService {
     void deleteAccessServer(Long id) throws AccessPointNotFoundException, PortNotFoundException;
 
     AccessPoint createAccessPoint(AccessPoint accessPoint);
+
+    AccessPoint updateAccessPoint(Long id, AccessPoint accessPoint) throws AccessPointNotFoundException;
+
+    String createAccessPointReport(Long id) throws AccessPointNotFoundException;
+
+    String createAccessPointsReport();
+
+    String createAccessPointsReportCSV();
 }

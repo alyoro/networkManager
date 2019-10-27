@@ -1,0 +1,19 @@
+server:
+  port: 8090
+management:
+  health:
+    ldap:
+      enabled: false
+spring:
+  data:
+    neo4j:
+      uri: bolt://localhost
+      username: networkManager
+      password: appPassword
+      embedded:
+        enabled: false
+  ldap:
+    url: ldaps://149.156.110.3:636/
+    username: anonymous
+    baseDn: ou=staff,o=fis
+
